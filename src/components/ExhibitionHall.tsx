@@ -38,15 +38,10 @@ function Column({ position }: { position: [number, number, number] }) {
           roughness={0.4}
         />
       </mesh>
-      {/* 柱頂發光環 */}
+      {/* 柱頂金環 */}
       <mesh position={[0, HALL_HEIGHT - 0.3, 0]}>
-        <torusGeometry args={[0.3, 0.02, 8, 32]} />
-        <meshStandardMaterial
-          color="#4a9eff"
-          emissive="#4a9eff"
-          emissiveIntensity={2}
-          toneMapped={false}
-        />
+        <torusGeometry args={[0.2, 0.02, 8, 24]} />
+        <meshStandardMaterial color="#b18f4d" metalness={0.8} roughness={0.3} />
       </mesh>
     </group>
   );
@@ -57,11 +52,11 @@ function CeilingLightStrip({ z, length }: { z: number; length: number }) {
   return (
     <group position={[0, HALL_HEIGHT - 0.05, z]}>
       <mesh>
-        <boxGeometry args={[0.3, 0.05, length]} />
+        <boxGeometry args={[0.34, 0.06, length]} />
         <meshStandardMaterial
-          color="#ffffff"
-          emissive="#7ab8ff"
-          emissiveIntensity={3}
+          color="#fff6e8"
+          emissive="#fff1da"
+          emissiveIntensity={1.4}
           toneMapped={false}
         />
       </mesh>
@@ -76,8 +71,9 @@ function WallDressing() {
   const zB = -ZONE_DEPTH / 2 + 0.16;
   const dadoY = 1.45; // 護牆板高度
   const crownY = HALL_HEIGHT - 0.28;
-  const wainColor = "#21344f";
-  const moldColor = "#334c70";
+  const wainColor = "#c2baaa";
+  const moldColor = "#4a3d2f";
+  const accentColor = "#b18f4d";
 
   // 側牆壁柱位置（沿 Z）
   const pilZ = [-7, -3.5, 0, 3.5, 7];
@@ -105,7 +101,7 @@ function WallDressing() {
           </mesh>
           <mesh position={[x + sign * 0.07, dadoY + 0.03, 0]}>
             <boxGeometry args={[0.02, 0.02, ZONE_DEPTH]} />
-            <meshBasicMaterial color="#4a9eff" toneMapped={false} />
+            <meshStandardMaterial color={accentColor} metalness={0.8} roughness={0.3} />
           </mesh>
           {/* 頂部冠線板（crown molding） */}
           <mesh position={[x + sign * 0.04, crownY, 0]}>
@@ -115,18 +111,18 @@ function WallDressing() {
           {/* 踢腳板 */}
           <mesh position={[x + sign * 0.04, 0.09, 0]}>
             <boxGeometry args={[0.1, 0.18, ZONE_DEPTH]} />
-            <meshStandardMaterial color="#16243c" metalness={0.3} roughness={0.6} />
+            <meshStandardMaterial color="#3a342c" metalness={0.2} roughness={0.7} />
           </mesh>
           {/* 壁柱 */}
           {pilZ.map((z) => (
             <group key={z} position={[x, 0, z]}>
               <mesh position={[sign * 0.02, (crownY + 0.1) / 2 + 0.18, 0]}>
                 <boxGeometry args={[0.14, crownY - 0.1, 0.42]} />
-                <meshStandardMaterial color="#28405f" metalness={0.35} roughness={0.45} />
+                <meshStandardMaterial color="#cdc6b6" metalness={0.1} roughness={0.7} />
               </mesh>
               <mesh position={[sign * 0.1, (crownY + 0.1) / 2 + 0.18, 0]}>
                 <boxGeometry args={[0.02, crownY - 0.4, 0.04]} />
-                <meshBasicMaterial color="#4a9eff" toneMapped={false} />
+                <meshStandardMaterial color={accentColor} metalness={0.8} roughness={0.3} />
               </mesh>
             </group>
           ))}
@@ -149,7 +145,7 @@ function WallDressing() {
         </mesh>
         <mesh position={[0, 0.09, zB + 0.04]}>
           <boxGeometry args={[HALL_WIDTH, 0.18, 0.1]} />
-          <meshStandardMaterial color="#16243c" metalness={0.3} roughness={0.6} />
+          <meshStandardMaterial color="#3a342c" metalness={0.2} roughness={0.7} />
         </mesh>
       </group>
     </group>
@@ -195,18 +191,14 @@ function PottedPlant({ position }: { position: [number, number, number] }) {
   const leaves = [0, 1, 2, 3, 4];
   return (
     <group position={position}>
-      {/* 花盆 */}
+      {/* 花盆（陶土色） */}
       <mesh position={[0, 0.26, 0]}>
         <cylinderGeometry args={[0.27, 0.2, 0.52, 18]} />
-        <meshStandardMaterial color="#2a3650" metalness={0.4} roughness={0.5} />
+        <meshStandardMaterial color="#9c6b4a" roughness={0.85} />
       </mesh>
       <mesh position={[0, 0.53, 0]}>
         <cylinderGeometry args={[0.285, 0.285, 0.05, 18]} />
-        <meshStandardMaterial
-          color="#4a9eff"
-          emissive="#4a9eff"
-          emissiveIntensity={0.5}
-        />
+        <meshStandardMaterial color="#b18f4d" metalness={0.6} roughness={0.4} />
       </mesh>
       {/* 葉叢 */}
       {leaves.map((i) => {
@@ -245,16 +237,11 @@ function Stanchion({ position }: { position: [number, number, number] }) {
       </mesh>
       <mesh position={[0, 0.5, 0]}>
         <cylinderGeometry args={[0.03, 0.03, 0.9, 12]} />
-        <meshStandardMaterial color="#c8d4e4" metalness={0.85} roughness={0.2} />
+        <meshStandardMaterial color="#b9975a" metalness={0.85} roughness={0.25} />
       </mesh>
       <mesh position={[0, 0.97, 0]}>
         <sphereGeometry args={[0.06, 16, 16]} />
-        <meshStandardMaterial
-          color="#7ac4ff"
-          emissive="#4a9eff"
-          emissiveIntensity={1.5}
-          toneMapped={false}
-        />
+        <meshStandardMaterial color="#c8a763" metalness={0.85} roughness={0.25} />
       </mesh>
     </group>
   );
@@ -267,12 +254,12 @@ function CeilingCoffer() {
   const y = HALL_HEIGHT - 0.04;
   return (
     <group position={[0, y, 0]}>
-      {/* 內凹深色面 */}
+      {/* 內凹淺色天花 */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.04, 0]}>
         <planeGeometry args={[w, d]} />
-        <meshStandardMaterial color="#0a1424" />
+        <meshStandardMaterial color="#f0ece2" roughness={0.95} />
       </mesh>
-      {/* 飾框四邊 */}
+      {/* 飾框四邊（暖白發光，模擬天花燈槽） */}
       {[
         { p: [0, 0, -d / 2] as [number, number, number], a: [w, 0.06, 0.08] as [number, number, number] },
         { p: [0, 0, d / 2] as [number, number, number], a: [w, 0.06, 0.08] as [number, number, number] },
@@ -282,9 +269,9 @@ function CeilingCoffer() {
         <mesh key={i} position={p}>
           <boxGeometry args={a} />
           <meshStandardMaterial
-            color="#4a9eff"
-            emissive="#4a9eff"
-            emissiveIntensity={1.4}
+            color="#fff4e2"
+            emissive="#ffeccf"
+            emissiveIntensity={0.8}
             toneMapped={false}
           />
         </mesh>
@@ -303,72 +290,62 @@ function ZoneRoom({ positionZ }: { positionZ: number }) {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
         <planeGeometry args={[HALL_WIDTH, ZONE_DEPTH]} />
         <MeshReflectorMaterial
-          blur={[140, 36]}
+          blur={[120, 30]}
           resolution={128}
           mixBlur={1}
-          mixStrength={0.6}
-          roughness={0.75}
+          mixStrength={0.35}
+          roughness={0.85}
           depthScale={1}
           minDepthThreshold={0.4}
           maxDepthThreshold={1.4}
-          color="#2a3a55"
-          metalness={0.55}
-          mirror={0.35}
+          color="#b8b1a2"
+          metalness={0.15}
+          mirror={0.25}
         />
       </mesh>
 
-      {/* 地板底色 */}
+      {/* 地板底色（暖石材） */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[HALL_WIDTH, ZONE_DEPTH]} />
-        <meshStandardMaterial color="#1a2a3f" />
+        <meshStandardMaterial color="#aaa395" roughness={0.9} />
       </mesh>
 
-      {/* 天花板 */}
+      {/* 天花板（淺色） */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, HALL_HEIGHT, 0]}>
         <planeGeometry args={[HALL_WIDTH, ZONE_DEPTH]} />
-        <meshStandardMaterial color="#0f1a2e" />
+        <meshStandardMaterial color="#ece8de" roughness={0.95} />
       </mesh>
 
       {/* 天花板發光條 */}
       <CeilingLightStrip z={-ZONE_DEPTH / 4} length={ZONE_DEPTH * 0.4} />
       <CeilingLightStrip z={ZONE_DEPTH / 4} length={ZONE_DEPTH * 0.4} />
 
-      {/* 左牆 */}
+      {/* 左牆（淺色藝廊牆面） */}
       <mesh position={[-HALL_WIDTH / 2, HALL_HEIGHT / 2, 0]}>
         <boxGeometry args={[WALL_THICKNESS, HALL_HEIGHT, ZONE_DEPTH]} />
-        <meshStandardMaterial color="#1e2e4a" roughness={0.7} />
+        <meshStandardMaterial color="#d7d1c4" roughness={0.95} />
       </mesh>
-      {/* 左牆發光線條 */}
-      <mesh position={[-HALL_WIDTH / 2 + 0.15, 0.1, 0]}>
-        <boxGeometry args={[0.02, 0.05, ZONE_DEPTH]} />
-        <meshStandardMaterial
-          color="#4a9eff"
-          emissive="#4a9eff"
-          emissiveIntensity={2}
-          toneMapped={false}
-        />
+      {/* 左牆深色踢腳 */}
+      <mesh position={[-HALL_WIDTH / 2 + 0.14, 0.11, 0]}>
+        <boxGeometry args={[0.05, 0.22, ZONE_DEPTH]} />
+        <meshStandardMaterial color="#3a342c" roughness={0.6} />
       </mesh>
 
       {/* 右牆 */}
       <mesh position={[HALL_WIDTH / 2, HALL_HEIGHT / 2, 0]}>
         <boxGeometry args={[WALL_THICKNESS, HALL_HEIGHT, ZONE_DEPTH]} />
-        <meshStandardMaterial color="#1e2e4a" roughness={0.7} />
+        <meshStandardMaterial color="#d7d1c4" roughness={0.95} />
       </mesh>
-      {/* 右牆發光線條 */}
-      <mesh position={[HALL_WIDTH / 2 - 0.15, 0.1, 0]}>
-        <boxGeometry args={[0.02, 0.05, ZONE_DEPTH]} />
-        <meshStandardMaterial
-          color="#4a9eff"
-          emissive="#4a9eff"
-          emissiveIntensity={2}
-          toneMapped={false}
-        />
+      {/* 右牆深色踢腳 */}
+      <mesh position={[HALL_WIDTH / 2 - 0.14, 0.11, 0]}>
+        <boxGeometry args={[0.05, 0.22, ZONE_DEPTH]} />
+        <meshStandardMaterial color="#3a342c" roughness={0.6} />
       </mesh>
 
-      {/* 後牆 */}
+      {/* 後牆（沉穩主題色） */}
       <mesh position={[0, HALL_HEIGHT / 2, -ZONE_DEPTH / 2]}>
         <boxGeometry args={[HALL_WIDTH, HALL_HEIGHT, WALL_THICKNESS]} />
-        <meshStandardMaterial color="#182842" roughness={0.7} />
+        <meshStandardMaterial color="#5a4a44" roughness={0.92} />
       </mesh>
 
       {/* 四個角落柱子（緊貼牆角，避免擋住展品） */}
@@ -414,12 +391,8 @@ function ZoneRoom({ positionZ }: { positionZ: number }) {
       {/* 引導柱之間的繩索 */}
       {[-1.6, 1.6].map((x) => (
         <mesh key={`rope-${x}`} position={[x, 0.85, ZONE_DEPTH / 2 - 2.4]}>
-          <boxGeometry args={[0.03, 0.03, 2.4]} />
-          <meshStandardMaterial
-            color="#3a6ea5"
-            emissive="#4a9eff"
-            emissiveIntensity={0.6}
-          />
+          <boxGeometry args={[0.04, 0.04, 2.4]} />
+          <meshStandardMaterial color="#7a2230" roughness={0.85} />
         </mesh>
       ))}
     </group>
@@ -437,26 +410,22 @@ function Corridor({ fromZ, toZ }: { fromZ: number; toZ: number }) {
       {/* 走廊地板 */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]}>
         <planeGeometry args={[HALL_WIDTH * 0.55, length]} />
-        <meshStandardMaterial
-          color="#2a3a55"
-          metalness={0.5}
-          roughness={0.5}
-        />
+        <meshStandardMaterial color="#aaa395" roughness={0.9} />
       </mesh>
 
       {/* 走廊天花板 */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, HALL_HEIGHT * 0.8, 0]}>
         <planeGeometry args={[HALL_WIDTH * 0.55, length]} />
-        <meshStandardMaterial color="#0f1a2e" />
+        <meshStandardMaterial color="#ece8de" roughness={0.95} />
       </mesh>
 
       {/* 走廊天花板發光 */}
       <mesh position={[0, HALL_HEIGHT * 0.8 - 0.05, 0]}>
         <boxGeometry args={[0.2, 0.05, length * 0.9]} />
         <meshStandardMaterial
-          color="#ffffff"
-          emissive="#7ab8ff"
-          emissiveIntensity={3}
+          color="#fff6e8"
+          emissive="#fff1da"
+          emissiveIntensity={1.2}
           toneMapped={false}
         />
       </mesh>
@@ -464,32 +433,22 @@ function Corridor({ fromZ, toZ }: { fromZ: number; toZ: number }) {
       {/* 走廊左牆 */}
       <mesh position={[-HALL_WIDTH * 0.275, HALL_HEIGHT * 0.4, 0]}>
         <boxGeometry args={[WALL_THICKNESS, HALL_HEIGHT * 0.8, length]} />
-        <meshStandardMaterial color="#1e2e4a" />
+        <meshStandardMaterial color="#d7d1c4" roughness={0.95} />
       </mesh>
       {/* 走廊右牆 */}
       <mesh position={[HALL_WIDTH * 0.275, HALL_HEIGHT * 0.4, 0]}>
         <boxGeometry args={[WALL_THICKNESS, HALL_HEIGHT * 0.8, length]} />
-        <meshStandardMaterial color="#1e2e4a" />
+        <meshStandardMaterial color="#d7d1c4" roughness={0.95} />
       </mesh>
 
-      {/* 走廊兩側發光邊線 */}
-      <mesh position={[-HALL_WIDTH * 0.275 + 0.15, 0.08, 0]}>
-        <boxGeometry args={[0.02, 0.04, length]} />
-        <meshStandardMaterial
-          color="#4a9eff"
-          emissive="#4a9eff"
-          emissiveIntensity={2}
-          toneMapped={false}
-        />
+      {/* 走廊兩側踢腳 */}
+      <mesh position={[-HALL_WIDTH * 0.275 + 0.15, 0.1, 0]}>
+        <boxGeometry args={[0.04, 0.2, length]} />
+        <meshStandardMaterial color="#3a342c" roughness={0.7} />
       </mesh>
-      <mesh position={[HALL_WIDTH * 0.275 - 0.15, 0.08, 0]}>
-        <boxGeometry args={[0.02, 0.04, length]} />
-        <meshStandardMaterial
-          color="#4a9eff"
-          emissive="#4a9eff"
-          emissiveIntensity={2}
-          toneMapped={false}
-        />
+      <mesh position={[HALL_WIDTH * 0.275 - 0.15, 0.1, 0]}>
+        <boxGeometry args={[0.04, 0.2, length]} />
+        <meshStandardMaterial color="#3a342c" roughness={0.7} />
       </mesh>
     </group>
   );
@@ -512,27 +471,20 @@ export default function ExhibitionHall() {
         />
       ))}
 
-      {/* 環境光（提高以補償移除的聚光燈） */}
-      <ambientLight intensity={0.46} color="#b8d8ff" />
+      {/* 明亮暖白環境光 + 半球光（自然均勻，效能佳） */}
+      <ambientLight intensity={0.85} color="#fff4e6" />
+      <hemisphereLight args={["#fff6ea", "#9c9486", 0.7]} />
 
-      {/* 每個展區一盞主燈 + 一盞補光（精簡光源以提升效能） */}
+      {/* 每個展區一盞暖白主燈 */}
       {zones.map((zone) => (
-        <group key={`lights-${zone.id}`}>
-          <pointLight
-            position={[0, HALL_HEIGHT - 0.5, zone.positionZ - ZONE_DEPTH / 2]}
-            intensity={2.0}
-            color="#a8ccff"
-            distance={ZONE_DEPTH}
-            decay={1.6}
-          />
-          <pointLight
-            position={[0, 2.2, zone.positionZ - ZONE_DEPTH / 2]}
-            intensity={1.0}
-            color="#4a9eff"
-            distance={12}
-            decay={1.9}
-          />
-        </group>
+        <pointLight
+          key={`lights-${zone.id}`}
+          position={[0, HALL_HEIGHT - 0.4, zone.positionZ - ZONE_DEPTH / 2]}
+          intensity={1.5}
+          color="#fff1dc"
+          distance={ZONE_DEPTH * 1.1}
+          decay={1.5}
+        />
       ))}
     </group>
   );

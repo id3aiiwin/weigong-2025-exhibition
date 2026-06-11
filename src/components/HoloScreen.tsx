@@ -1,9 +1,7 @@
 "use client";
-import { useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useState } from "react";
 import { Text, Image } from "@react-three/drei";
 import { asset } from "@/lib/asset";
-import * as THREE from "three";
 
 interface HoloScreenProps {
   position: [number, number, number];
@@ -15,6 +13,7 @@ interface HoloScreenProps {
   seed?: number;
 }
 
+/** 牆面裱框展件（深木外框 + 金色內襯 + 卡紙 + 作品 + 銘牌） */
 export default function HoloScreen({
   position,
   rotation = [0, 0, 0],
@@ -22,70 +21,28 @@ export default function HoloScreen({
   author,
   thumbnail,
   onClick,
-  seed = 0,
 }: HoloScreenProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  const mainRef = useRef<THREE.Mesh>(null);
-  const scanRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
-  useFrame((state, delta) => {
-    if (!groupRef.current || !mainRef.current || !scanRef.current) return;
-
-    // 浮動動畫
-    const t = state.clock.elapsedTime + seed;
-    groupRef.current.position.y = position[1] + Math.sin(t * 0.8) * 0.08;
-
-    // 發光強度變化
-    const mat = mainRef.current.material as THREE.MeshStandardMaterial;
-    const target = hovered ? 1.2 : 0.5;
-    mat.emissiveIntensity = THREE.MathUtils.lerp(
-      mat.emissiveIntensity,
-      target,
-      delta * 4
-    );
-
-    // 掃描線上下移動
-    const scanY = ((t * 0.5) % 2) - 1;
-    scanRef.current.position.y = scanY * 1.7;
-    const scanMat = scanRef.current.material as THREE.MeshBasicMaterial;
-    scanMat.opacity = hovered ? 0.8 : 0.4;
-  });
-
   return (
-    <group position={position} rotation={rotation} ref={groupRef}>
-      {/* 外層光暈 */}
+    <group position={position} rotation={rotation}>
+      {/* 外框（深木色） */}
       <mesh position={[0, 0, -0.05]}>
-        <planeGeometry args={[3.0, 4.0]} />
-        <meshBasicMaterial
-          color="#4a9eff"
-          transparent
-          opacity={hovered ? 0.15 : 0.08}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-
-      {/* 邊框 */}
-      <mesh position={[0, 0, -0.02]}>
-        <planeGeometry args={[2.7, 3.7]} />
+        <boxGeometry args={[2.92, 3.98, 0.09]} />
         <meshStandardMaterial
-          color="#0a2040"
-          emissive="#4a9eff"
-          emissiveIntensity={hovered ? 1.5 : 0.8}
-          toneMapped={false}
+          color={hovered ? "#4a3a28" : "#2f2620"}
+          roughness={0.5}
+          metalness={0.1}
         />
       </mesh>
-
-      {/* 內框 */}
-      <mesh position={[0, 0, -0.01]}>
-        <planeGeometry args={[2.55, 3.55]} />
-        <meshStandardMaterial color="#050a18" />
+      {/* 金色內襯 */}
+      <mesh position={[0, 0, -0.005]}>
+        <planeGeometry args={[2.64, 3.7]} />
+        <meshStandardMaterial color="#9c7f4a" metalness={0.7} roughness={0.4} />
       </mesh>
-
-      {/* 主光屏 */}
+      {/* 卡紙（passe-partout） */}
       <mesh
-        ref={mainRef}
+        position={[0, 0, 0]}
         onPointerOver={(e) => {
           e.stopPropagation();
           setHovered(true);
@@ -100,111 +57,61 @@ export default function HoloScreen({
           onClick();
         }}
       >
-        <planeGeometry args={[2.4, 3.4]} />
-        <meshStandardMaterial
-          color={thumbnail ? "#0a1830" : "#0c2545"}
-          emissive={thumbnail ? "#16335c" : "#4a9eff"}
-          emissiveIntensity={thumbnail ? 0.25 : 0.5}
-          transparent
-          opacity={0.95}
-        />
+        <planeGeometry args={[2.54, 3.58]} />
+        <meshStandardMaterial color="#efe9db" roughness={0.95} />
       </mesh>
 
-      {/* 掃描線動畫 */}
-      <mesh ref={scanRef} position={[0, 0, 0.01]} raycast={() => null}>
-        <planeGeometry args={[2.4, 0.04]} />
-        <meshBasicMaterial
-          color="#7ac4ff"
-          transparent
-          opacity={0.4}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-
-      {/* 作品縮圖 */}
+      {/* 作品掃描圖 */}
       {thumbnail ? (
         <Image
           url={asset(thumbnail)}
-          position={[0, 0.25, 0.006]}
-          scale={[2.0, 2.8]}
-          transparent
+          position={[0, 0.3, 0.006]}
+          scale={[2.02, 2.74]}
           toneMapped
           raycast={() => null}
         />
       ) : (
-        <>
-          <mesh position={[0, 0.5, 0.005]} raycast={() => null}>
-            <planeGeometry args={[1.4, 1.4]} />
-            <meshStandardMaterial
-              color="#1a3560"
-              emissive="#4a9eff"
-              emissiveIntensity={0.4}
-              transparent
-              opacity={0.7}
-            />
-          </mesh>
-          <Text
-            position={[0, 0.5, 0.02]}
-            fontSize={0.5}
-            color="#7ac4ff"
-            anchorX="center"
-            anchorY="middle"
-          >
-            PDF
-          </Text>
-        </>
+        <Text
+          position={[0, 0.3, 0.01]}
+          fontSize={0.4}
+          color="#b9b1a0"
+          anchorX="center"
+          anchorY="middle"
+        >
+          ☐
+        </Text>
       )}
 
-      {/* 四角裝飾 */}
-      {[
-        [-1.15, 1.65],
-        [1.15, 1.65],
-        [-1.15, -1.65],
-        [1.15, -1.65],
-      ].map(([x, y], i) => (
-        <mesh key={i} position={[x, y, 0.01]} raycast={() => null}>
-          <planeGeometry args={[0.15, 0.03]} />
-          <meshBasicMaterial
-            color="#4a9eff"
-            toneMapped={false}
-          />
-        </mesh>
-      ))}
-
-      {/* 標題 */}
+      {/* 銘牌：部門 + 主題 */}
       <Text
-        position={[0, -1.25, 0.02]}
-        fontSize={0.16}
-        color="#e0f0ff"
+        position={[0, -1.42, 0.01]}
+        fontSize={0.17}
+        color="#332a20"
         anchorX="center"
-        anchorY="top"
-        maxWidth={2.2}
-        outlineWidth={0.008}
-        outlineColor="#0a2040"
+        anchorY="middle"
+        maxWidth={2.3}
+      >
+        {author}
+      </Text>
+      <Text
+        position={[0, -1.64, 0.01]}
+        fontSize={0.082}
+        color="#7c7160"
+        anchorX="center"
+        anchorY="middle"
+        maxWidth={2.3}
+        lineHeight={1.3}
       >
         {title}
       </Text>
 
-      {/* 作者 */}
+      {/* 點擊提示 */}
       <Text
-        position={[0, -1.5, 0.02]}
-        fontSize={0.12}
-        color="#7ac4ff"
+        position={[0, 2.22, 0.02]}
+        fontSize={hovered ? 0.14 : 0.11}
+        color={hovered ? "#8a6d2f" : "#a99055"}
         anchorX="center"
-        anchorY="top"
-      >
-        {author}
-      </Text>
-
-      {/* 互動提示（常駐，hover 時更明顯） */}
-      <Text
-        position={[0, 1.82, 0.02]}
-        fontSize={hovered ? 0.15 : 0.12}
-        color={hovered ? "#ffffff" : "#9fd0ff"}
-        anchorX="center"
-        outlineWidth={0.01}
-        outlineColor="#0a2040"
+        anchorY="middle"
       >
         🔍 點擊看完整文件
       </Text>

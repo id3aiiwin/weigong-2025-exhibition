@@ -1,7 +1,7 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
+import { EffectComposer, Vignette } from "@react-three/postprocessing";
 import ExhibitionHall from "./ExhibitionHall";
 import Zone from "./Zone";
 import GuidedTour from "./GuidedTour";
@@ -28,12 +28,12 @@ export default function Exhibition({
 }: ExhibitionProps) {
   return (
     <Canvas
-      camera={{ position: [0, 1.7, 5], fov: 65, near: 0.1, far: 200 }}
+      camera={{ position: [0, 1.7, 5], fov: 60, near: 0.1, far: 200 }}
       style={{ width: "100vw", height: "100vh" }}
       gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       dpr={[1, 1.5]}
       onCreated={({ gl }) => {
-        gl.setClearColor("#050a18");
+        gl.setClearColor("#e7e1d4");
       }}
     >
       <Suspense fallback={null}>
@@ -59,18 +59,12 @@ export default function Exhibition({
           joystickInput={joystickInput}
         />
 
-        {/* 深度霧氣 */}
-        <fog attach="fog" args={["#050a18", 15, 70]} />
+        {/* 明亮暖調空氣感霧氣 */}
+        <fog attach="fog" args={["#e3ddd0", 26, 110]} />
 
-        {/* 後處理特效 */}
+        {/* 後處理：僅保留極淡暈影，移除科幻泛光 */}
         <EffectComposer>
-          <Bloom
-            intensity={0.85}
-            luminanceThreshold={0.6}
-            luminanceSmoothing={0.85}
-            mipmapBlur
-          />
-          <Vignette eskil={false} offset={0.1} darkness={0.7} />
+          <Vignette eskil={false} offset={0.25} darkness={0.45} />
         </EffectComposer>
       </Suspense>
     </Canvas>

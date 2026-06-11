@@ -37,7 +37,7 @@ function GlowRing({ position }: { position: [number, number, number] }) {
   return (
     <mesh ref={ref} position={position} rotation={[Math.PI / 2, 0, 0]}>
       <torusGeometry args={[0.8, 0.02, 16, 64]} />
-      <meshBasicMaterial color="#4a9eff" toneMapped={false} />
+      <meshBasicMaterial color="#b18f4d" toneMapped={false} />
     </mesh>
   );
 }
@@ -60,20 +60,19 @@ function LobbyZone() {
         <mesh position={[0, 2.5, 0]}>
           <planeGeometry args={[9, 3]} />
           <meshStandardMaterial
-            color="#0a2040"
-            emissive="#4a9eff"
-            emissiveIntensity={0.2}
+            color="#43382b"
+            roughness={0.6}
             transparent
             opacity={0.6}
           />
         </mesh>
         <mesh position={[0, 1, 0.01]}>
           <boxGeometry args={[7, 0.03, 0.02]} />
-          <meshBasicMaterial color="#4a9eff" toneMapped={false} />
+          <meshBasicMaterial color="#b18f4d" toneMapped={false} />
         </mesh>
         <mesh position={[0, 4, 0.01]}>
           <boxGeometry args={[7, 0.03, 0.02]} />
-          <meshBasicMaterial color="#4a9eff" toneMapped={false} />
+          <meshBasicMaterial color="#b18f4d" toneMapped={false} />
         </mesh>
         <Text
           position={[0, 3.4, 0.02]}
@@ -82,7 +81,7 @@ function LobbyZone() {
           anchorX="center"
           anchorY="middle"
           outlineWidth={0.014}
-          outlineColor="#4a9eff"
+          outlineColor="#2f2620"
           maxWidth={8}
         >
           {lobbyInfo.title}
@@ -90,7 +89,7 @@ function LobbyZone() {
         <Text
           position={[0, 2.85, 0.02]}
           fontSize={0.18}
-          color="#7ac4ff"
+          color="#b9a06a"
           anchorX="center"
           anchorY="middle"
           letterSpacing={0.3}
@@ -120,7 +119,7 @@ function LobbyZone() {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 4]}>
         <ringGeometry args={[1.4, 1.55, 64]} />
         <meshBasicMaterial
-          color="#4a9eff"
+          color="#b18f4d"
           toneMapped={false}
           transparent
           opacity={0.6}
@@ -167,9 +166,8 @@ function WorksZone({ onSelect }: { onSelect: SelectFn }) {
         <mesh position={[0, 3.5, 0]}>
           <planeGeometry args={[8, 1.2]} />
           <meshStandardMaterial
-            color="#0a2040"
-            emissive="#4a9eff"
-            emissiveIntensity={0.3}
+            color="#43382b"
+            roughness={0.6}
             transparent
             opacity={0.7}
           />
@@ -180,14 +178,14 @@ function WorksZone({ onSelect }: { onSelect: SelectFn }) {
           color="#ffffff"
           anchorX="center"
           outlineWidth={0.012}
-          outlineColor="#4a9eff"
+          outlineColor="#2f2620"
         >
           同仁成果展區
         </Text>
         <Text
           position={[0, 3.2, 0.02]}
           fontSize={0.13}
-          color="#7ac4ff"
+          color="#b9a06a"
           anchorX="center"
           letterSpacing={0.3}
         >
@@ -288,9 +286,8 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
         <mesh position={[0, 3.5, 0]}>
           <planeGeometry args={[8, 1.2]} />
           <meshStandardMaterial
-            color="#0a2040"
-            emissive="#4a9eff"
-            emissiveIntensity={0.3}
+            color="#43382b"
+            roughness={0.6}
             transparent
             opacity={0.7}
           />
@@ -301,14 +298,14 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
           color="#ffffff"
           anchorX="center"
           outlineWidth={0.012}
-          outlineColor="#4a9eff"
+          outlineColor="#2f2620"
         >
           訓練成效亮點
         </Text>
         <Text
           position={[0, 3.2, 0.02]}
           fontSize={0.13}
-          color="#7ac4ff"
+          color="#b9a06a"
           anchorX="center"
           letterSpacing={0.3}
         >
@@ -345,27 +342,19 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
               <mesh position={[0.05, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
                 <planeGeometry args={[3.4, 2.6]} />
                 <meshBasicMaterial
-                  color="#4a9eff"
+                  color="#2f2620"
                   transparent
-                  opacity={0.1}
+                  opacity={0.3}
                   depthWrite={false}
                 />
               </mesh>
               <mesh rotation={[0, Math.PI / 2, 0]}>
                 <planeGeometry args={[3.2, 2.4]} />
-                <meshStandardMaterial
-                  color="#0a2040"
-                  emissive="#4a9eff"
-                  emissiveIntensity={0.4}
-                />
+                <meshStandardMaterial color="#2f2620" roughness={0.5} />
               </mesh>
               <mesh position={[0.02, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
                 <planeGeometry args={[3.0, 2.2]} />
-                <meshStandardMaterial
-                  color="#1a3560"
-                  emissive="#4a9eff"
-                  emissiveIntensity={0.2}
-                />
+                <meshStandardMaterial color="#efe9db" roughness={0.95} />
               </mesh>
               <Image
                 url={asset(photo.image)}
@@ -377,11 +366,9 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
               <Text
                 position={[0.04, -1.3, 0]}
                 rotation={[0, Math.PI / 2, 0]}
-                fontSize={0.14}
-                color="#ffffff"
+                fontSize={0.13}
+                color="#3a2f24"
                 anchorX="center"
-                outlineWidth={0.008}
-                outlineColor="#0a2040"
               >
                 {photo.caption}
               </Text>
@@ -422,27 +409,19 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
               <mesh position={[-0.05, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
                 <planeGeometry args={[3.4, 2.6]} />
                 <meshBasicMaterial
-                  color="#4a9eff"
+                  color="#2f2620"
                   transparent
-                  opacity={0.1}
+                  opacity={0.3}
                   depthWrite={false}
                 />
               </mesh>
               <mesh rotation={[0, -Math.PI / 2, 0]}>
                 <planeGeometry args={[3.2, 2.4]} />
-                <meshStandardMaterial
-                  color="#0a2040"
-                  emissive="#4a9eff"
-                  emissiveIntensity={0.4}
-                />
+                <meshStandardMaterial color="#2f2620" roughness={0.5} />
               </mesh>
               <mesh position={[-0.02, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
                 <planeGeometry args={[3.0, 2.2]} />
-                <meshStandardMaterial
-                  color="#1a3560"
-                  emissive="#4a9eff"
-                  emissiveIntensity={0.2}
-                />
+                <meshStandardMaterial color="#efe9db" roughness={0.95} />
               </mesh>
               <Image
                 url={asset(photo.image)}
@@ -454,11 +433,9 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
               <Text
                 position={[-0.04, -1.3, 0]}
                 rotation={[0, -Math.PI / 2, 0]}
-                fontSize={0.14}
-                color="#ffffff"
+                fontSize={0.13}
+                color="#3a2f24"
                 anchorX="center"
-                outlineWidth={0.008}
-                outlineColor="#0a2040"
               >
                 {photo.caption}
               </Text>
@@ -504,9 +481,8 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
         <mesh position={[0, 4, 0]}>
           <planeGeometry args={[9, 0.9]} />
           <meshStandardMaterial
-            color="#0a2040"
-            emissive="#4a9eff"
-            emissiveIntensity={0.3}
+            color="#43382b"
+            roughness={0.6}
             transparent
             opacity={0.7}
           />
@@ -517,14 +493,14 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
           color="#ffffff"
           anchorX="center"
           outlineWidth={0.012}
-          outlineColor="#4a9eff"
+          outlineColor="#2f2620"
         >
           2026 課程與展望
         </Text>
         <Text
           position={[0, 3.75, 0.02]}
           fontSize={0.12}
-          color="#7ac4ff"
+          color="#b9a06a"
           anchorX="center"
           letterSpacing={0.3}
         >
@@ -560,7 +536,7 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
             <mesh position={[0, 0, -0.1]}>
               <planeGeometry args={[2.6, 3.4]} />
               <meshBasicMaterial
-                color="#4a9eff"
+                color="#b18f4d"
                 transparent
                 opacity={0.1}
                 depthWrite={false}
@@ -569,23 +545,21 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
             <mesh position={[0, 0, -0.03]}>
               <planeGeometry args={[2.4, 3.2]} />
               <meshStandardMaterial
-                color="#0a2040"
-                emissive="#4a9eff"
-                emissiveIntensity={0.5}
+                color="#2f2620"
+                roughness={0.5}
               />
             </mesh>
             <mesh>
               <planeGeometry args={[2.25, 3.05]} />
               <meshStandardMaterial
-                color="#081830"
-                emissive="#4a9eff"
-                emissiveIntensity={0.15}
+                color="#efe9db"
+                roughness={0.95}
               />
             </mesh>
             <Text
               position={[0, 1.45, 0.02]}
               fontSize={0.11}
-              color="#7ac4ff"
+              color="#b9a06a"
               anchorX="center"
               letterSpacing={0.2}
             >

@@ -52,7 +52,7 @@ export default function Particles({ count = 400 }: { count?: number }) {
       </bufferGeometry>
       <pointsMaterial
         size={0.04}
-        color="#7ab8ff"
+        color="#d8c49a"
         transparent
         opacity={0.7}
         sizeAttenuation
