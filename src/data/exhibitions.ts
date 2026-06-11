@@ -65,9 +65,6 @@ export const works: WorkItem[] = [
       "/exhibits/works/work-1/p02.jpg",
       "/exhibits/works/work-1/p03.jpg",
       "/exhibits/works/work-1/p04.jpg",
-      "/exhibits/works/work-1/p05.jpg",
-      "/exhibits/works/work-1/p06.jpg",
-      "/exhibits/works/work-1/p07.jpg",
     ],
   },
   {
@@ -85,6 +82,9 @@ export const works: WorkItem[] = [
       "/exhibits/works/work-2/p05.jpg",
       "/exhibits/works/work-2/p06.jpg",
       "/exhibits/works/work-2/p07.jpg",
+      "/exhibits/works/work-2/p08.jpg",
+      "/exhibits/works/work-2/p09.jpg",
+      "/exhibits/works/work-2/p10.jpg",
     ],
   },
   {
@@ -101,7 +101,6 @@ export const works: WorkItem[] = [
       "/exhibits/works/work-4/p04.jpg",
       "/exhibits/works/work-4/p05.jpg",
       "/exhibits/works/work-4/p06.jpg",
-      "/exhibits/works/work-4/p07.jpg",
     ],
   },
   {
@@ -111,7 +110,13 @@ export const works: WorkItem[] = [
     description:
       "依個別化留才計畫表記錄新人特質辨識、輔導目標與適應追蹤，落實天賦特質於日常輔導與關懷之中。",
     thumbnail: "/exhibits/works/work-3/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-3/p01.jpg",
+      "/exhibits/works/work-3/p02.jpg",
+      "/exhibits/works/work-3/p03.jpg",
+      "/exhibits/works/work-3/p04.jpg",
+      "/exhibits/works/work-3/p05.jpg",
+    ],
   },
   {
     id: "work-6",
@@ -120,7 +125,14 @@ export const works: WorkItem[] = [
     description:
       "針對病房新進護理人員設計留才與適應輔導方案，結合個別化關懷、班別安排與階段性目標追蹤，協助新人穩定融入團隊。",
     thumbnail: "/exhibits/works/work-6/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-6/p01.jpg",
+      "/exhibits/works/work-6/p02.jpg",
+      "/exhibits/works/work-6/p03.jpg",
+      "/exhibits/works/work-6/p04.jpg",
+      "/exhibits/works/work-6/p05.jpg",
+      "/exhibits/works/work-6/p06.jpg",
+    ],
   },
   {
     id: "work-5",
@@ -129,7 +141,13 @@ export const works: WorkItem[] = [
     description:
       "結合長照單位特性，以人格特質辨識為基礎擬定新人留才與輔導計畫，強化新人歸屬感與專業成長路徑。",
     thumbnail: "/exhibits/works/work-5/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-5/p01.jpg",
+      "/exhibits/works/work-5/p02.jpg",
+      "/exhibits/works/work-5/p03.jpg",
+      "/exhibits/works/work-5/p04.jpg",
+      "/exhibits/works/work-5/p05.jpg",
+    ],
   },
   {
     id: "work-7",
@@ -138,7 +156,13 @@ export const works: WorkItem[] = [
     description:
       "依四講訓練架構提出部門招募與留才年度行動方案，從面試觀察、特質辨識到個別化輔導與激勵措施，建立可執行的留才流程。",
     thumbnail: "/exhibits/works/work-7/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-7/p01.jpg",
+      "/exhibits/works/work-7/p02.jpg",
+      "/exhibits/works/work-7/p03.jpg",
+      "/exhibits/works/work-7/p04.jpg",
+      "/exhibits/works/work-7/p05.jpg",
+    ],
   },
   {
     id: "work-8",
@@ -147,7 +171,10 @@ export const works: WorkItem[] = [
     description:
       "以天賦特質應用於新進護理人員的留才策略，規劃漸進式任務、夥伴配對與正向回饋，協助新人加速適應臨床環境。",
     thumbnail: "/exhibits/works/work-8/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-8/p01.jpg",
+      "/exhibits/works/work-8/p02.jpg",
+    ],
   },
 ];
 

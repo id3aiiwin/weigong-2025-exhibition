@@ -303,17 +303,17 @@ function ZoneRoom({ positionZ }: { positionZ: number }) {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
         <planeGeometry args={[HALL_WIDTH, ZONE_DEPTH]} />
         <MeshReflectorMaterial
-          blur={[400, 100]}
-          resolution={512}
+          blur={[180, 45]}
+          resolution={160}
           mixBlur={1}
-          mixStrength={1.2}
-          roughness={0.6}
+          mixStrength={0.7}
+          roughness={0.7}
           depthScale={1}
           minDepthThreshold={0.4}
           maxDepthThreshold={1.4}
           color="#2a3a55"
           metalness={0.6}
-          mirror={0.5}
+          mirror={0.4}
         />
       </mesh>
 
@@ -512,31 +512,24 @@ export default function ExhibitionHall() {
         />
       ))}
 
-      {/* 環境光 */}
-      <ambientLight intensity={0.25} color="#b0d4ff" />
+      {/* 環境光（提高以補償減少的燈源） */}
+      <ambientLight intensity={0.34} color="#b0d4ff" />
 
-      {/* 每個展區的聚光燈 */}
+      {/* 每個展區一盞主燈 + 一盞補光（精簡光源以提升效能） */}
       {zones.map((zone) => (
         <group key={`lights-${zone.id}`}>
           <pointLight
             position={[0, HALL_HEIGHT - 0.5, zone.positionZ - ZONE_DEPTH / 2]}
-            intensity={1.5}
+            intensity={1.7}
             color="#a0c8ff"
             distance={ZONE_DEPTH}
-            decay={1.8}
+            decay={1.7}
           />
           <pointLight
-            position={[-4, 2, zone.positionZ - ZONE_DEPTH / 2]}
-            intensity={0.8}
+            position={[0, 2.2, zone.positionZ - ZONE_DEPTH / 2]}
+            intensity={0.9}
             color="#4a9eff"
-            distance={8}
-            decay={2}
-          />
-          <pointLight
-            position={[4, 2, zone.positionZ - ZONE_DEPTH / 2]}
-            intensity={0.8}
-            color="#4a9eff"
-            distance={8}
+            distance={11}
             decay={2}
           />
         </group>

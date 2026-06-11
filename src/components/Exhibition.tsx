@@ -27,7 +27,7 @@ export default function Exhibition({
       camera={{ position: [0, 1.7, 5], fov: 65, near: 0.1, far: 200 }}
       style={{ width: "100vw", height: "100vh" }}
       gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       onCreated={({ gl }) => {
         gl.setClearColor("#050a18");
       }}
@@ -43,7 +43,7 @@ export default function Exhibition({
           />
         ))}
 
-        <Particles count={300} />
+        <Particles count={140} />
 
         <GuidedTour
           currentZoneIndex={currentZoneIndex}
