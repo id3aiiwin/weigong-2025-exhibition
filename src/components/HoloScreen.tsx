@@ -102,9 +102,9 @@ export default function HoloScreen({
       >
         <planeGeometry args={[2.4, 3.4]} />
         <meshStandardMaterial
-          color={thumbnail ? "#ffffff" : "#0c2545"}
-          emissive={thumbnail ? "#ffffff" : "#4a9eff"}
-          emissiveIntensity={0.5}
+          color={thumbnail ? "#0a1830" : "#0c2545"}
+          emissive={thumbnail ? "#16335c" : "#4a9eff"}
+          emissiveIntensity={thumbnail ? 0.25 : 0.5}
           transparent
           opacity={0.95}
         />
@@ -126,9 +126,10 @@ export default function HoloScreen({
       {thumbnail ? (
         <Image
           url={asset(thumbnail)}
-          position={[0, 0.35, 0.006]}
-          scale={[2.2, 2.5]}
+          position={[0, 0.25, 0.006]}
+          scale={[2.0, 2.8]}
           transparent
+          toneMapped
           raycast={() => null}
         />
       ) : (
@@ -196,19 +197,17 @@ export default function HoloScreen({
         {author}
       </Text>
 
-      {/* 互動提示 */}
-      {hovered && (
-        <Text
-          position={[0, 1.85, 0.02]}
-          fontSize={0.13}
-          color="#ffffff"
-          anchorX="center"
-          outlineWidth={0.01}
-          outlineColor="#4a9eff"
-        >
-          ◆ 點擊查看詳情 ◆
-        </Text>
-      )}
+      {/* 互動提示（常駐，hover 時更明顯） */}
+      <Text
+        position={[0, 1.82, 0.02]}
+        fontSize={hovered ? 0.15 : 0.12}
+        color={hovered ? "#ffffff" : "#9fd0ff"}
+        anchorX="center"
+        outlineWidth={0.01}
+        outlineColor="#0a2040"
+      >
+        🔍 點擊看完整文件
+      </Text>
     </group>
   );
 }

@@ -73,7 +73,7 @@ export default function LoadingScreen({ visible, onEnter }: LoadingScreenProps) 
         {/* 進入按鈕 */}
         <button
           onClick={onEnter}
-          className="group relative px-10 py-3.5 overflow-hidden rounded-xl bg-gradient-to-r from-[#4a9eff]/20 to-[#4a9eff]/30 hover:from-[#4a9eff]/40 hover:to-[#4a9eff]/60 text-white font-medium transition-all duration-300 border border-[#4a9eff]/50 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/50"
+          className="group relative px-14 py-4 overflow-hidden rounded-2xl bg-gradient-to-r from-[#4a9eff]/40 to-[#4a9eff]/60 hover:from-[#4a9eff]/60 hover:to-[#4a9eff]/80 text-white text-lg font-bold transition-all duration-300 border border-[#4a9eff]/70 shadow-xl shadow-blue-500/40 hover:shadow-blue-500/70 hover:scale-[1.03] animate-pulse hover:animate-none"
         >
           <span className="relative z-10 flex items-center gap-2 tracking-wider">
             進入展覽館
@@ -82,22 +82,10 @@ export default function LoadingScreen({ visible, onEnter }: LoadingScreenProps) 
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
         </button>
 
-        {/* 操作說明（自動依裝置調整，無需選擇） */}
-        <div className="mt-14 text-center max-w-md px-6">
-          <div className="text-[11px] tracking-[0.4em] text-white/40 mb-3">
-            操作說明
-          </div>
-          <div className="grid grid-cols-2 gap-4 text-xs text-white/50">
-            <div className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
-              <div className="text-[#7ac4ff] mb-1">🖱️ 電腦</div>
-              <div>「上一件／下一件」逐件巡覽，或開「展品目錄」點選</div>
-            </div>
-            <div className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
-              <div className="text-[#7ac4ff] mb-1">📱 手機</div>
-              <div>觸控點選展品與目錄，可切換自由探索</div>
-            </div>
-          </div>
-        </div>
+        {/* 操作說明（一行小字，不可點選） */}
+        <p className="mt-10 text-[11px] text-white/35 text-center max-w-sm px-6 leading-relaxed">
+          進入後可用「上一件／下一件」逐件巡覽，或開「展品目錄」直接點選任一展品
+        </p>
       </div>
 
       {/* 角落裝飾 */}

@@ -61,9 +61,9 @@ export default function Exhibition({
         {/* 後處理特效 */}
         <EffectComposer>
           <Bloom
-            intensity={1.0}
-            luminanceThreshold={0.3}
-            luminanceSmoothing={0.9}
+            intensity={0.85}
+            luminanceThreshold={0.6}
+            luminanceSmoothing={0.85}
             mipmapBlur
           />
           <Vignette eskil={false} offset={0.1} darkness={0.7} />
