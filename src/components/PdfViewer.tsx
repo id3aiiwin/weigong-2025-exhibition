@@ -51,7 +51,7 @@ export default function PdfViewer({ workId, onClose }: PdfViewerProps) {
         <div className="px-8 pb-4">
           {hasPages ? (
             /* PDF 頁面圖片 */
-            <div className="relative aspect-[3/4] bg-[#1a2a44] rounded-lg overflow-hidden flex items-center justify-center">
+            <div className="relative aspect-video bg-[#1a2a44] rounded-lg overflow-hidden flex items-center justify-center">
               <img
                 src={asset(work.pages[currentPage])}
                 alt={`${work.title} 第 ${currentPage + 1} 頁`}

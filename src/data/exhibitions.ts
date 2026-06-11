@@ -60,7 +60,15 @@ export const works: WorkItem[] = [
     description:
       "以「天生贏家四型人格測驗」與皮紋天賦特質測試辨識新人特質，判讀為溫和型（海豚）。針對其內向保守、適應較慢的特點，規劃漸進式技能學習、固定班別、設定乳房攝影／骨密度達人等目標，搭配包容接納與持續鼓勵的輔導計畫。",
     thumbnail: "/exhibits/works/work-1/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-1/p01.jpg",
+      "/exhibits/works/work-1/p02.jpg",
+      "/exhibits/works/work-1/p03.jpg",
+      "/exhibits/works/work-1/p04.jpg",
+      "/exhibits/works/work-1/p05.jpg",
+      "/exhibits/works/work-1/p06.jpg",
+      "/exhibits/works/work-1/p07.jpg",
+    ],
   },
   {
     id: "work-2",
@@ -69,7 +77,15 @@ export const works: WorkItem[] = [
     description:
       "針對多元型（整合型）新人進行行為表現、互動習慣與壓力反應的完整觀察，設計漸進式任務安排、反思與回饋練習、小目標追蹤與穩定引導者角色，並以「強調努力與進步」的激勵方案協助其於 ICU 穩定適應、降低焦慮與離職傾向。",
     thumbnail: "/exhibits/works/work-2/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-2/p01.jpg",
+      "/exhibits/works/work-2/p02.jpg",
+      "/exhibits/works/work-2/p03.jpg",
+      "/exhibits/works/work-2/p04.jpg",
+      "/exhibits/works/work-2/p05.jpg",
+      "/exhibits/works/work-2/p06.jpg",
+      "/exhibits/works/work-2/p07.jpg",
+    ],
   },
   {
     id: "work-4",
@@ -78,7 +94,15 @@ export const works: WorkItem[] = [
     description:
       "辨識新人為內斂型（謹慎細心、踏實可靠、喜歡明確制度）。輔導策略採明確交辦書面流程、適度關心與資深夥伴配對；激勵方案運用 Teams 即時回饋與肯定性語言，並尊重其工作時程規劃，逐步建立自信與團隊參與感。",
     thumbnail: "/exhibits/works/work-4/thumb.jpg",
-    pages: [],
+    pages: [
+      "/exhibits/works/work-4/p01.jpg",
+      "/exhibits/works/work-4/p02.jpg",
+      "/exhibits/works/work-4/p03.jpg",
+      "/exhibits/works/work-4/p04.jpg",
+      "/exhibits/works/work-4/p05.jpg",
+      "/exhibits/works/work-4/p06.jpg",
+      "/exhibits/works/work-4/p07.jpg",
+    ],
   },
   {
     id: "work-3",

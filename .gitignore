@@ -13,3 +13,6 @@ npm-debug.log*
 # deploy / local tooling
 /.vercel
 /.ppt_work
+
+# 暫存渲染工作目錄（含未遮蔽原稿，勿公開）
+/.ppt_work*
