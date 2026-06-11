@@ -18,9 +18,14 @@ import {
   CarpetRunner,
 } from "./ExhibitionElements";
 
+type SelectFn = (
+  type: "work" | "highlight" | "course",
+  id: string
+) => void;
+
 interface ZoneProps {
   zoneId: string;
-  onSelectWork: (id: string) => void;
+  onSelectExhibit: SelectFn;
 }
 
 /** 旋轉發光環 */
@@ -138,12 +143,15 @@ function LobbyZone() {
   );
 }
 
-function WorksZone({ onSelectWork }: { onSelectWork: (id: string) => void }) {
+function WorksZone({ onSelect }: { onSelect: SelectFn }) {
   const z = zones[1].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
-  const half = Math.ceil(works.length / 2);
-  const leftWorks = works.slice(0, half);
-  const rightWorks = works.slice(half);
+  // 牆面展示前 10 件（每側 5 件，沿走廊由前到後），其餘可由「展品目錄」瀏覽
+  const wallWorks = works.slice(0, 10);
+  const half = Math.ceil(wallWorks.length / 2);
+  const leftWorks = wallWorks.slice(0, half);
+  const rightWorks = wallWorks.slice(half);
+  const wallZ = (i: number) => 6 - i * 2.9;
 
   return (
     <group position={[0, 0, centerZ]}>
@@ -183,7 +191,7 @@ function WorksZone({ onSelectWork }: { onSelectWork: (id: string) => void }) {
           anchorX="center"
           letterSpacing={0.3}
         >
-          {`STAFF PROJECTS · 共 ${works.length} 件成果`}
+          {`STAFF PROJECTS · 共 ${works.length} 位（目錄可看全部）`}
         </Text>
       </group>
 
@@ -196,7 +204,7 @@ function WorksZone({ onSelectWork }: { onSelectWork: (id: string) => void }) {
 
       {/* 左牆作品 + 編號牌 + 軌道燈 */}
       {leftWorks.map((work, i) => {
-        const zPos = -1.5 - i * 2.4;
+        const zPos = wallZ(i);
         return (
           <group key={work.id}>
             <HoloScreen
@@ -205,7 +213,7 @@ function WorksZone({ onSelectWork }: { onSelectWork: (id: string) => void }) {
               title={work.title}
               author={work.author}
               thumbnail={work.thumbnail}
-              onClick={() => onSelectWork(work.id)}
+              onClick={() => onSelect("work", work.id)}
               seed={i * 0.7}
             />
             <ExhibitNumber
@@ -225,7 +233,7 @@ function WorksZone({ onSelectWork }: { onSelectWork: (id: string) => void }) {
 
       {/* 右牆作品 */}
       {rightWorks.map((work, i) => {
-        const zPos = -1.5 - i * 2.4;
+        const zPos = wallZ(i);
         return (
           <group key={work.id}>
             <HoloScreen
@@ -234,7 +242,7 @@ function WorksZone({ onSelectWork }: { onSelectWork: (id: string) => void }) {
               title={work.title}
               author={work.author}
               thumbnail={work.thumbnail}
-              onClick={() => onSelectWork(work.id)}
+              onClick={() => onSelect("work", work.id)}
               seed={i * 0.7 + 2}
             />
             <ExhibitNumber
@@ -262,7 +270,7 @@ function WorksZone({ onSelectWork }: { onSelectWork: (id: string) => void }) {
   );
 }
 
-function PhotosZone() {
+function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
   const z = zones[2].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
 
@@ -320,7 +328,20 @@ function PhotosZone() {
         return (
           <group key={photo.id}>
             {/* 左牆照片框 */}
-            <group position={[-5.5, 2.2, zPos]}>
+            <group
+              position={[-5.5, 2.2, zPos]}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect("highlight", photo.id);
+              }}
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                document.body.style.cursor = "pointer";
+              }}
+              onPointerOut={() => {
+                document.body.style.cursor = "default";
+              }}
+            >
               <mesh position={[0.05, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
                 <planeGeometry args={[3.4, 2.6]} />
                 <meshBasicMaterial
@@ -384,7 +405,20 @@ function PhotosZone() {
         const zPos = -2 - i * 4.5;
         return (
           <group key={photo.id}>
-            <group position={[5.5, 2.2, zPos]}>
+            <group
+              position={[5.5, 2.2, zPos]}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect("highlight", photo.id);
+              }}
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                document.body.style.cursor = "pointer";
+              }}
+              onPointerOut={() => {
+                document.body.style.cursor = "default";
+              }}
+            >
               <mesh position={[-0.05, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
                 <planeGeometry args={[3.4, 2.6]} />
                 <meshBasicMaterial
@@ -452,7 +486,7 @@ function PhotosZone() {
   );
 }
 
-function CoursesZone() {
+function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
   const z = zones[3].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
 
@@ -508,7 +542,21 @@ function CoursesZone() {
       {courses.map((course, i) => {
         const x = (i - (courses.length - 1) / 2) * 2.4;
         return (
-          <group key={course.id} position={[x, 2, -ZONE_DEPTH / 2 + 0.6]}>
+          <group
+            key={course.id}
+            position={[x, 2, -ZONE_DEPTH / 2 + 0.6]}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect("course", course.id);
+            }}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              document.body.style.cursor = "pointer";
+            }}
+            onPointerOut={() => {
+              document.body.style.cursor = "default";
+            }}
+          >
             <mesh position={[0, 0, -0.1]}>
               <planeGeometry args={[2.6, 3.4]} />
               <meshBasicMaterial
@@ -583,16 +631,16 @@ function CoursesZone() {
   );
 }
 
-export default function Zone({ zoneId, onSelectWork }: ZoneProps) {
+export default function Zone({ zoneId, onSelectExhibit }: ZoneProps) {
   switch (zoneId) {
     case "lobby":
       return <LobbyZone />;
     case "works":
-      return <WorksZone onSelectWork={onSelectWork} />;
+      return <WorksZone onSelect={onSelectExhibit} />;
     case "photos":
-      return <PhotosZone />;
+      return <PhotosZone onSelect={onSelectExhibit} />;
     case "courses":
-      return <CoursesZone />;
+      return <CoursesZone onSelect={onSelectExhibit} />;
     default:
       return null;
   }

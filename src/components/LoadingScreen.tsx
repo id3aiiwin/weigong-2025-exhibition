@@ -82,16 +82,19 @@ export default function LoadingScreen({ visible, onEnter }: LoadingScreenProps) 
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
         </button>
 
-        {/* 操作提示 */}
-        <div className="mt-16 text-center max-w-md px-6">
+        {/* 操作說明（自動依裝置調整，無需選擇） */}
+        <div className="mt-14 text-center max-w-md px-6">
+          <div className="text-[11px] tracking-[0.4em] text-white/40 mb-3">
+            操作說明
+          </div>
           <div className="grid grid-cols-2 gap-4 text-xs text-white/50">
             <div className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
-              <div className="text-[#7ac4ff] mb-1">🖱️ 桌面版</div>
-              <div>下方按鈕導覽或切換自由探索</div>
+              <div className="text-[#7ac4ff] mb-1">🖱️ 電腦</div>
+              <div>「上一件／下一件」逐件巡覽，或開「展品目錄」點選</div>
             </div>
             <div className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
-              <div className="text-[#7ac4ff] mb-1">📱 手機版</div>
-              <div>點擊切換展區、觸控操作</div>
+              <div className="text-[#7ac4ff] mb-1">📱 手機</div>
+              <div>觸控點選展品與目錄，可切換自由探索</div>
             </div>
           </div>
         </div>

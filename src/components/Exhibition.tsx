@@ -8,19 +8,22 @@ import GuidedTour from "./GuidedTour";
 import PlayerControls from "./PlayerControls";
 import Particles from "./Particles";
 import { zones } from "@/data/exhibitions";
+import type { StopType } from "@/data/tourStops";
 
 interface ExhibitionProps {
-  currentZoneIndex: number;
+  cam: [number, number, number];
+  look: [number, number, number];
   controlMode: "guided" | "free";
   joystickInput: { x: number; y: number };
-  onSelectWork: (id: string) => void;
+  onSelectExhibit: (type: StopType, id: string) => void;
 }
 
 export default function Exhibition({
-  currentZoneIndex,
+  cam,
+  look,
   controlMode,
   joystickInput,
-  onSelectWork,
+  onSelectExhibit,
 }: ExhibitionProps) {
   return (
     <Canvas
@@ -39,16 +42,13 @@ export default function Exhibition({
           <Zone
             key={zone.id}
             zoneId={zone.id}
-            onSelectWork={onSelectWork}
+            onSelectExhibit={onSelectExhibit}
           />
         ))}
 
         <Particles count={140} />
 
-        <GuidedTour
-          currentZoneIndex={currentZoneIndex}
-          enabled={controlMode === "guided"}
-        />
+        <GuidedTour cam={cam} look={look} enabled={controlMode === "guided"} />
 
         <PlayerControls
           enabled={controlMode === "free"}
@@ -61,7 +61,7 @@ export default function Exhibition({
         {/* 後處理特效 */}
         <EffectComposer>
           <Bloom
-            intensity={1.2}
+            intensity={1.0}
             luminanceThreshold={0.3}
             luminanceSmoothing={0.9}
             mipmapBlur

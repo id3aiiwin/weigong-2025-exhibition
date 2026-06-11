@@ -1,67 +1,83 @@
 "use client";
-import { create } from "zustand";
-import { zones } from "@/data/exhibitions";
-
-// We'll use zustand-like pattern with React state instead to avoid extra dep
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { buildStops, type StopType } from "@/data/tourStops";
 
 export type ControlMode = "guided" | "free";
 
-export interface ExhibitionState {
-  currentZoneIndex: number;
-  controlMode: ControlMode;
-  selectedWorkId: string | null;
-  isLoading: boolean;
+export interface SelectedExhibit {
+  type: StopType;
+  id: string;
 }
 
 export function useExhibition() {
-  const [state, setState] = useState<ExhibitionState>({
-    currentZoneIndex: 0,
-    controlMode: "guided",
-    selectedWorkId: null,
-    isLoading: true,
-  });
+  const stops = useMemo(() => buildStops(), []);
 
-  const goToZone = useCallback((index: number) => {
-    if (index >= 0 && index < zones.length) {
-      setState((s) => ({ ...s, currentZoneIndex: index }));
-    }
+  const [tourIndex, setTourIndex] = useState(0);
+  const [controlMode, setControlMode] = useState<ControlMode>("guided");
+  const [selected, setSelected] = useState<SelectedExhibit | null>(null);
+  const [directoryOpen, setDirectoryOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const currentStop = stops[tourIndex];
+  const currentZoneIndex = currentStop.zoneIndex;
+
+  const nextStop = useCallback(() => {
+    setTourIndex((i) => Math.min(i + 1, stops.length - 1));
+  }, [stops.length]);
+
+  const prevStop = useCallback(() => {
+    setTourIndex((i) => Math.max(i - 1, 0));
   }, []);
 
-  const nextZone = useCallback(() => {
-    setState((s) => ({
-      ...s,
-      currentZoneIndex: Math.min(s.currentZoneIndex + 1, zones.length - 1),
-    }));
-  }, []);
+  const goToZone = useCallback(
+    (zoneIndex: number) => {
+      const idx = stops.findIndex((s) => s.zoneIndex === zoneIndex);
+      if (idx >= 0) setTourIndex(idx);
+    },
+    [stops]
+  );
 
-  const prevZone = useCallback(() => {
-    setState((s) => ({
-      ...s,
-      currentZoneIndex: Math.max(s.currentZoneIndex - 1, 0),
-    }));
-  }, []);
+  const focusExhibit = useCallback(
+    (type: StopType, id: string) => {
+      const idx = stops.findIndex((s) => s.type === type && s.id === id);
+      if (idx >= 0) setTourIndex(idx);
+    },
+    [stops]
+  );
 
-  const setControlMode = useCallback((mode: ControlMode) => {
-    setState((s) => ({ ...s, controlMode: mode }));
-  }, []);
+  // 開啟檢視器（同時把鏡頭帶到該展品，若它在巡覽路徑上）
+  const selectExhibit = useCallback(
+    (type: StopType, id: string) => {
+      setSelected({ type, id });
+      focusExhibit(type, id);
+    },
+    [focusExhibit]
+  );
 
-  const selectWork = useCallback((id: string | null) => {
-    setState((s) => ({ ...s, selectedWorkId: id }));
-  }, []);
+  const closeViewer = useCallback(() => setSelected(null), []);
 
-  const setLoading = useCallback((loading: boolean) => {
-    setState((s) => ({ ...s, isLoading: loading }));
+  const toggleMode = useCallback(() => {
+    setControlMode((m) => (m === "guided" ? "free" : "guided"));
   }, []);
 
   return {
-    ...state,
-    currentZone: zones[state.currentZoneIndex],
+    stops,
+    tourIndex,
+    currentStop,
+    currentZoneIndex,
+    controlMode,
+    selected,
+    directoryOpen,
+    isLoading,
+    nextStop,
+    prevStop,
     goToZone,
-    nextZone,
-    prevZone,
+    focusExhibit,
+    selectExhibit,
+    closeViewer,
     setControlMode,
-    selectWork,
-    setLoading,
+    toggleMode,
+    setDirectoryOpen,
+    setLoading: setIsLoading,
   };
 }

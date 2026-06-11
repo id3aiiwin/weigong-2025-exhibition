@@ -176,6 +176,175 @@ export const works: WorkItem[] = [
       "/exhibits/works/work-8/p02.jpg",
     ],
   },
+  {
+    id: "work-9",
+    title: "新人招募留才實作成果",
+    author: "資訊室",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-9/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-9/p01.jpg",
+      "/exhibits/works/work-9/p02.jpg",
+      "/exhibits/works/work-9/p03.jpg",
+      "/exhibits/works/work-9/p04.jpg",
+    ],
+  },
+  {
+    id: "work-10",
+    title: "新人招募留才實作成果",
+    author: "庶務洗縫",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-10/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-10/p01.jpg",
+      "/exhibits/works/work-10/p02.jpg",
+      "/exhibits/works/work-10/p03.jpg",
+      "/exhibits/works/work-10/p04.jpg",
+    ],
+  },
+  {
+    id: "work-11",
+    title: "新人招募留才實作成果",
+    author: "社區健康",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-11/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-11/p01.jpg",
+      "/exhibits/works/work-11/p02.jpg",
+      "/exhibits/works/work-11/p03.jpg",
+      "/exhibits/works/work-11/p04.jpg",
+    ],
+  },
+  {
+    id: "work-12",
+    title: "新人招募留才實作成果",
+    author: "生理檢查",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-12/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-12/p01.jpg",
+      "/exhibits/works/work-12/p02.jpg",
+      "/exhibits/works/work-12/p03.jpg",
+      "/exhibits/works/work-12/p04.jpg",
+      "/exhibits/works/work-12/p05.jpg",
+      "/exhibits/works/work-12/p06.jpg",
+      "/exhibits/works/work-12/p07.jpg",
+      "/exhibits/works/work-12/p08.jpg",
+      "/exhibits/works/work-12/p09.jpg",
+    ],
+  },
+  {
+    id: "work-13",
+    title: "新人招募留才實作成果",
+    author: "宏仁醫事組",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-13/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-13/p01.jpg",
+      "/exhibits/works/work-13/p02.jpg",
+      "/exhibits/works/work-13/p03.jpg",
+      "/exhibits/works/work-13/p04.jpg",
+    ],
+  },
+  {
+    id: "work-14",
+    title: "新人招募留才實作成果",
+    author: "精神二房",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-14/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-14/p01.jpg",
+      "/exhibits/works/work-14/p02.jpg",
+      "/exhibits/works/work-14/p03.jpg",
+    ],
+  },
+  {
+    id: "work-15",
+    title: "新人招募留才實作成果",
+    author: "9F 護理站",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-15/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-15/p01.jpg",
+      "/exhibits/works/work-15/p02.jpg",
+      "/exhibits/works/work-15/p03.jpg",
+      "/exhibits/works/work-15/p04.jpg",
+      "/exhibits/works/work-15/p05.jpg",
+    ],
+  },
+  {
+    id: "work-16",
+    title: "新人招募留才實作成果",
+    author: "為恭醫院",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-16/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-16/p01.jpg",
+      "/exhibits/works/work-16/p02.jpg",
+      "/exhibits/works/work-16/p03.jpg",
+      "/exhibits/works/work-16/p04.jpg",
+    ],
+  },
+  {
+    id: "work-17",
+    title: "新人招募留才實作成果",
+    author: "為恭醫院",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-17/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-17/p01.jpg",
+      "/exhibits/works/work-17/p02.jpg",
+      "/exhibits/works/work-17/p03.jpg",
+    ],
+  },
+  {
+    id: "work-18",
+    title: "新人招募留才實作成果",
+    author: "為恭醫院",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-18/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-18/p01.jpg",
+      "/exhibits/works/work-18/p02.jpg",
+      "/exhibits/works/work-18/p03.jpg",
+    ],
+  },
+  {
+    id: "work-19",
+    title: "新人招募留才實作成果",
+    author: "為恭醫院",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-19/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-19/p01.jpg",
+      "/exhibits/works/work-19/p02.jpg",
+      "/exhibits/works/work-19/p03.jpg",
+    ],
+  },
+  {
+    id: "work-20",
+    title: "新人招募留才實作成果",
+    author: "為恭醫院",
+    description:
+      "完成「醫療主管必備的招募留才全攻略」四講訓練，產出部門痛點診斷、STAR 結構化面談、新人留才計畫、30 日實踐行動與行動承諾等實作文件。",
+    thumbnail: "/exhibits/works/work-20/thumb.jpg",
+    pages: [
+      "/exhibits/works/work-20/p01.jpg",
+      "/exhibits/works/work-20/p02.jpg",
+      "/exhibits/works/work-20/p03.jpg",
+    ],
+  },
 ];
 
 // 訓練成效亮點（前後測統計與年度成果數據）

@@ -2,18 +2,14 @@
 import { useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { zones } from "@/data/exhibitions";
-import { ZONE_DEPTH } from "./ExhibitionHall";
 
 interface GuidedTourProps {
-  currentZoneIndex: number;
+  cam: [number, number, number];
+  look: [number, number, number];
   enabled: boolean;
 }
 
-export default function GuidedTour({
-  currentZoneIndex,
-  enabled,
-}: GuidedTourProps) {
+export default function GuidedTour({ cam, look, enabled }: GuidedTourProps) {
   const { camera } = useThree();
   const targetPos = useRef(new THREE.Vector3());
   const targetLook = useRef(new THREE.Vector3());
@@ -21,19 +17,12 @@ export default function GuidedTour({
   useFrame((_, delta) => {
     if (!enabled) return;
 
-    const zone = zones[currentZoneIndex];
-    const centerZ = zone.positionZ - ZONE_DEPTH / 2;
+    targetPos.current.set(cam[0], cam[1], cam[2]);
+    targetLook.current.set(look[0], look[1], look[2]);
 
-    // 攝影機目標位置：展區中心偏前方
-    targetPos.current.set(0, 1.7, centerZ + ZONE_DEPTH / 2 - 2);
-    // 看向展區深處
-    targetLook.current.set(0, 1.7, centerZ - 3);
-
-    // 平滑移動
-    const speed = delta * 2;
+    const speed = Math.min(delta * 2.2, 0.12);
     camera.position.lerp(targetPos.current, speed);
 
-    // 平滑轉向
     const currentDir = new THREE.Vector3();
     camera.getWorldDirection(currentDir);
     const targetDir = targetLook.current
