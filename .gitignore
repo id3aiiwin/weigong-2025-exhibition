@@ -1,0 +1,15 @@
+# dependencies
+/node_modules
+
+# next.js / build output
+/.next
+/out
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+
+# deploy / local tooling
+/.vercel
+/.ppt_work
