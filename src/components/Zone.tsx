@@ -55,57 +55,93 @@ function LobbyZone() {
         subtitle="ANNUAL TRAINING EXHIBITION"
       />
 
-      {/* 後牆主題背景 */}
+      {/* 後牆主題牆：大標題 + 三大成效數據 */}
       <group position={[0, 0, -ZONE_DEPTH / 2 + 0.2]}>
-        <mesh position={[0, 2.5, 0]}>
-          <planeGeometry args={[9, 3]} />
-          <meshStandardMaterial
-            color="#43382b"
-            roughness={0.6}
-            transparent
-            opacity={0.6}
-          />
+        {/* 深木主題面板 */}
+        <mesh position={[0, 2.55, 0]}>
+          <planeGeometry args={[10, 4.5]} />
+          <meshStandardMaterial color="#43382b" roughness={0.7} />
         </mesh>
-        <mesh position={[0, 1, 0.01]}>
-          <boxGeometry args={[7, 0.03, 0.02]} />
-          <meshBasicMaterial color="#b18f4d" toneMapped={false} />
+        {/* 金色上下飾線 */}
+        <mesh position={[0, 4.55, 0.02]}>
+          <boxGeometry args={[9, 0.035, 0.02]} />
+          <meshStandardMaterial color="#b18f4d" metalness={0.7} roughness={0.35} />
         </mesh>
-        <mesh position={[0, 4, 0.01]}>
-          <boxGeometry args={[7, 0.03, 0.02]} />
-          <meshBasicMaterial color="#b18f4d" toneMapped={false} />
+        <mesh position={[0, 0.55, 0.02]}>
+          <boxGeometry args={[9, 0.035, 0.02]} />
+          <meshStandardMaterial color="#b18f4d" metalness={0.7} roughness={0.35} />
         </mesh>
+
+        {/* 標題 */}
         <Text
-          position={[0, 3.4, 0.02]}
-          fontSize={0.42}
-          color="#ffffff"
+          position={[0, 4.1, 0.03]}
+          fontSize={0.46}
+          color="#fdf6e6"
           anchorX="center"
           anchorY="middle"
-          outlineWidth={0.014}
-          outlineColor="#2f2620"
-          maxWidth={8}
+          maxWidth={9}
+          outlineWidth={0.008}
+          outlineColor="#2a1f15"
         >
           {lobbyInfo.title}
         </Text>
         <Text
-          position={[0, 2.85, 0.02]}
-          fontSize={0.18}
-          color="#b9a06a"
+          position={[0, 3.6, 0.03]}
+          fontSize={0.17}
+          color="#d6bd86"
           anchorX="center"
           anchorY="middle"
-          letterSpacing={0.3}
+          letterSpacing={0.25}
         >
           {lobbyInfo.subtitle}
         </Text>
+
+        {/* 三大成效數據卡 */}
+        {lobbyInfo.stats.map((s, i) => {
+          const x = (i - 1) * 2.95;
+          return (
+            <group key={s.label} position={[x, 2.25, 0.03]}>
+              <mesh position={[0, 0, 0.004]}>
+                <planeGeometry args={[2.7, 1.7]} />
+                <meshStandardMaterial color="#2c241c" roughness={0.6} />
+              </mesh>
+              <mesh>
+                <planeGeometry args={[2.78, 1.78]} />
+                <meshStandardMaterial color="#b18f4d" metalness={0.7} roughness={0.35} />
+              </mesh>
+              <Text
+                position={[0, 0.34, 0.01]}
+                fontSize={0.5}
+                color="#f0cd7e"
+                anchorX="center"
+                anchorY="middle"
+              >
+                {s.value}
+              </Text>
+              <Text
+                position={[0, -0.42, 0.01]}
+                fontSize={0.16}
+                color="#ece4d2"
+                anchorX="center"
+                anchorY="middle"
+                maxWidth={2.4}
+              >
+                {s.label}
+              </Text>
+            </group>
+          );
+        })}
+
+        {/* 引導語 */}
         <Text
-          position={[0, 2.2, 0.02]}
-          fontSize={0.12}
-          color="#c0d8f0"
+          position={[0, 0.95, 0.03]}
+          fontSize={0.15}
+          color="#d6bd86"
           anchorX="center"
-          anchorY="top"
-          maxWidth={7.5}
-          lineHeight={1.7}
+          anchorY="middle"
+          maxWidth={9}
         >
-          {lobbyInfo.welcomeText}
+          沿紅毯前行 · 探索 20 位同仁的招募留才實作成果
         </Text>
       </group>
 
@@ -211,6 +247,7 @@ function WorksZone({ onSelect }: { onSelect: SelectFn }) {
               title={work.title}
               author={work.author}
               thumbnail={work.thumbnail}
+              pageCount={work.pages.length}
               onClick={() => onSelect("work", work.id)}
               seed={i * 0.7}
             />
@@ -240,6 +277,7 @@ function WorksZone({ onSelect }: { onSelect: SelectFn }) {
               title={work.title}
               author={work.author}
               thumbnail={work.thumbnail}
+              pageCount={work.pages.length}
               onClick={() => onSelect("work", work.id)}
               seed={i * 0.7 + 2}
             />
@@ -364,13 +402,23 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
                 transparent
               />
               <Text
-                position={[0.04, -1.3, 0]}
+                position={[0.04, -1.28, 0]}
                 rotation={[0, Math.PI / 2, 0]}
-                fontSize={0.13}
+                fontSize={0.12}
                 color="#3a2f24"
                 anchorX="center"
+                maxWidth={2.9}
               >
                 {photo.caption}
+              </Text>
+              <Text
+                position={[0.04, -1.58, 0]}
+                rotation={[0, Math.PI / 2, 0]}
+                fontSize={0.105}
+                color="#a6783a"
+                anchorX="center"
+              >
+                🔍 點擊看大圖
               </Text>
             </group>
             <ExhibitNumber
@@ -431,13 +479,23 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
                 transparent
               />
               <Text
-                position={[-0.04, -1.3, 0]}
+                position={[-0.04, -1.28, 0]}
                 rotation={[0, -Math.PI / 2, 0]}
-                fontSize={0.13}
+                fontSize={0.12}
                 color="#3a2f24"
                 anchorX="center"
+                maxWidth={2.9}
               >
                 {photo.caption}
+              </Text>
+              <Text
+                position={[-0.04, -1.58, 0]}
+                rotation={[0, -Math.PI / 2, 0]}
+                fontSize={0.105}
+                color="#a6783a"
+                anchorX="center"
+              >
+                🔍 點擊看大圖
               </Text>
             </group>
             <ExhibitNumber
@@ -568,7 +626,7 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
             <Text
               position={[0, 1.24, 0.02]}
               fontSize={0.1}
-              color="#9fd0ff"
+              color="#cbb98e"
               anchorX="center"
               maxWidth={2.1}
             >
@@ -576,10 +634,18 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
             </Text>
             <Image
               url={asset(course.image)}
-              position={[0, -0.18, 0.02]}
-              scale={[1.35, 2.45]}
+              position={[0, -0.12, 0.02]}
+              scale={[1.3, 2.36]}
               transparent
             />
+            <Text
+              position={[0, -1.44, 0.02]}
+              fontSize={0.1}
+              color="#d6b878"
+              anchorX="center"
+            >
+              🔍 點擊看課程
+            </Text>
           </group>
         );
       })}

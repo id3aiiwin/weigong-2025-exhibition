@@ -390,50 +390,20 @@ export function ReceptionDesk({
       >
         INFORMATION
       </Text>
-      {/* 背後立牌 */}
-      <mesh position={[0, 2, -0.4]}>
-        <planeGeometry args={[2.4, 1.6]} />
-        <meshStandardMaterial
-          color="#3a2f24"
-          emissive="#5a4420"
-          emissiveIntensity={0.3}
-          transparent
-          opacity={0.92}
-        />
+      {/* 桌面小擺飾：迎賓銘牌 */}
+      <mesh position={[0, 1.22, 0.2]} rotation={[-0.5, 0, 0]}>
+        <planeGeometry args={[0.8, 0.26]} />
+        <meshStandardMaterial color="#2c241c" roughness={0.5} />
       </mesh>
       <Text
-        position={[0, 2.3, -0.39]}
-        fontSize={0.18}
-        color="#ffffff"
+        position={[0, 1.235, 0.31]}
+        rotation={[-0.5, 0, 0]}
+        fontSize={0.1}
+        color="#d6bd86"
         anchorX="center"
         anchorY="middle"
       >
         歡迎光臨
-      </Text>
-      <Text
-        position={[0, 2.05, -0.39]}
-        fontSize={0.1}
-        color="#b9a06a"
-        anchorX="center"
-        anchorY="middle"
-        letterSpacing={0.2}
-      >
-        WELCOME
-      </Text>
-      <mesh position={[0, 1.85, -0.39]}>
-        <boxGeometry args={[1.6, 0.02, 0.01]} />
-        <meshBasicMaterial color="#b18f4d" toneMapped={false} />
-      </mesh>
-      <Text
-        position={[0, 1.65, -0.39]}
-        fontSize={0.09}
-        color="#c0d8f0"
-        anchorX="center"
-        anchorY="middle"
-        maxWidth={2.2}
-        lineHeight={1.5}
-      >
-        請使用下方按鈕瀏覽各展區{"\n"}或切換自由探索模式
       </Text>
     </group>
   );
