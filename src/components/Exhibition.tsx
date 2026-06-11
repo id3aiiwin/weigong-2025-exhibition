@@ -7,6 +7,7 @@ import Zone from "./Zone";
 import GuidedTour from "./GuidedTour";
 import PlayerControls from "./PlayerControls";
 import Particles from "./Particles";
+import Visitors from "./Visitors";
 import { zones } from "@/data/exhibitions";
 import type { StopType } from "@/data/tourStops";
 
@@ -47,6 +48,9 @@ export default function Exhibition({
         ))}
 
         <Particles count={140} />
+
+        {/* 場內走動人偶 */}
+        <Visitors />
 
         <GuidedTour cam={cam} look={look} enabled={controlMode === "guided"} />
 

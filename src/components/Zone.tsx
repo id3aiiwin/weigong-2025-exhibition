@@ -324,7 +324,7 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
 
       {/* 照片 + 編號 + 軌道燈 */}
       {photos.slice(0, 3).map((photo, i) => {
-        const zPos = -2 - i * 4.5;
+        const zPos = 5 - i * 4;
         return (
           <group key={photo.id}>
             {/* 左牆照片框 */}
@@ -402,7 +402,7 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
       })}
 
       {photos.slice(3, 6).map((photo, i) => {
-        const zPos = -2 - i * 4.5;
+        const zPos = 5 - i * 4;
         return (
           <group key={photo.id}>
             <group
@@ -540,7 +540,7 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
 
       {/* 課程展板 */}
       {courses.map((course, i) => {
-        const x = (i - (courses.length - 1) / 2) * 2.4;
+        const x = (i - (courses.length - 1) / 2) * 2.1;
         return (
           <group
             key={course.id}
@@ -612,7 +612,7 @@ function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
 
       {/* 軌道燈打在課程板上 */}
       {courses.map((_, i) => {
-        const x = (i - (courses.length - 1) / 2) * 2.4;
+        const x = (i - (courses.length - 1) / 2) * 2.1;
         return (
           <TrackSpotlight
             key={i}

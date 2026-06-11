@@ -66,7 +66,7 @@ export function buildStops(): Stop[] {
     const left = idx < phalf;
     const k = left ? idx : idx - phalf;
     const sign = left ? -1 : 1;
-    const zRel = -2 - k * 4.5;
+    const zRel = 5 - k * 4; // 在房間內（-9~9），避免落到後牆外
     const worldZ = centerZ(2) + zRel;
     stops.push({
       key: p.id,
@@ -79,20 +79,28 @@ export function buildStops(): Stop[] {
     });
   });
 
-  // 3 2026 展望
-  stops.push(overview(3));
+  // 3 2026 展望（課程在後牆，總覽鏡頭直接面向後牆）
+  const cz3 = centerZ(3);
+  const boardZ = cz3 - ZONE_DEPTH / 2 + 0.6;
+  stops.push({
+    key: "zone-3",
+    zoneIndex: 3,
+    type: "zone",
+    label: zones[3].name,
+    cam: [0, 1.7, boardZ + 6.5],
+    look: [0, 2, boardZ],
+  });
   const n = courses.length;
   courses.forEach((c, i) => {
-    const x = (i - (n - 1) / 2) * 2.4;
-    const worldZ = centerZ(3) - ZONE_DEPTH / 2 + 0.6;
+    const x = (i - (n - 1) / 2) * 2.1;
     stops.push({
       key: c.id,
       zoneIndex: 3,
       type: "course",
       id: c.id,
       label: c.title,
-      cam: [x * 0.5, 1.7, worldZ + 3.6],
-      look: [x, 2, worldZ],
+      cam: [x, 1.7, boardZ + 4.2], // 正面直視，避開角落柱
+      look: [x, 2, boardZ],
     });
   });
 

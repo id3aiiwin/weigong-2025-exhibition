@@ -286,51 +286,27 @@ export function ExhibitNumber({
   );
 }
 
-/** 軌道聚光燈（天花板軌道 + 聚光燈） */
+/** 軌道燈具（純裝飾，不發實際光源以提升效能；展品本身自帶亮度） */
 export function TrackSpotlight({
   position,
-  target,
   color = "#ffffff",
 }: {
   position: [number, number, number];
-  target: [number, number, number];
+  target?: [number, number, number];
   color?: string;
 }) {
-  const lightRef = useRef<THREE.SpotLight>(null);
-  const targetRef = useRef<THREE.Object3D>(new THREE.Object3D());
-
-  useFrame(() => {
-    if (lightRef.current && targetRef.current) {
-      targetRef.current.position.set(...target);
-      targetRef.current.updateMatrixWorld();
-      lightRef.current.target = targetRef.current;
-    }
-  });
-
   return (
     <group position={position}>
       {/* 燈具外殼 */}
       <mesh>
-        <cylinderGeometry args={[0.08, 0.12, 0.2, 12]} />
+        <cylinderGeometry args={[0.08, 0.12, 0.2, 10]} />
         <meshStandardMaterial color="#1a2a3f" metalness={0.7} roughness={0.3} />
       </mesh>
       {/* 燈泡發光 */}
       <mesh position={[0, -0.08, 0]}>
-        <cylinderGeometry args={[0.08, 0.08, 0.02, 12]} />
+        <cylinderGeometry args={[0.08, 0.08, 0.02, 10]} />
         <meshBasicMaterial color={color} toneMapped={false} />
       </mesh>
-      {/* 實際光源 */}
-      <spotLight
-        ref={lightRef}
-        position={[0, 0, 0]}
-        intensity={2}
-        angle={0.5}
-        penumbra={0.5}
-        distance={8}
-        decay={1.5}
-        color={color}
-      />
-      <primitive object={targetRef.current} />
     </group>
   );
 }

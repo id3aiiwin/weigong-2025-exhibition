@@ -13,7 +13,7 @@ function Column({ position }: { position: [number, number, number] }) {
     <group position={position}>
       {/* 主柱體 */}
       <mesh position={[0, HALL_HEIGHT / 2, 0]}>
-        <cylinderGeometry args={[0.25, 0.25, HALL_HEIGHT, 16]} />
+        <cylinderGeometry args={[0.18, 0.18, HALL_HEIGHT, 14]} />
         <meshStandardMaterial
           color="#c8d4e4"
           metalness={0.3}
@@ -22,7 +22,7 @@ function Column({ position }: { position: [number, number, number] }) {
       </mesh>
       {/* 柱頂裝飾 */}
       <mesh position={[0, HALL_HEIGHT - 0.2, 0]}>
-        <cylinderGeometry args={[0.4, 0.3, 0.3, 16]} />
+        <cylinderGeometry args={[0.28, 0.22, 0.3, 14]} />
         <meshStandardMaterial
           color="#e0e8f0"
           metalness={0.4}
@@ -31,7 +31,7 @@ function Column({ position }: { position: [number, number, number] }) {
       </mesh>
       {/* 柱底裝飾 */}
       <mesh position={[0, 0.15, 0]}>
-        <cylinderGeometry args={[0.4, 0.45, 0.3, 16]} />
+        <cylinderGeometry args={[0.28, 0.32, 0.3, 14]} />
         <meshStandardMaterial
           color="#b0c0d0"
           metalness={0.3}
@@ -192,7 +192,7 @@ function WallSconce({
 
 /** 角落盆栽 */
 function PottedPlant({ position }: { position: [number, number, number] }) {
-  const leaves = [0, 1, 2, 3, 4, 5, 6];
+  const leaves = [0, 1, 2, 3, 4];
   return (
     <group position={position}>
       {/* 花盆 */}
@@ -303,17 +303,17 @@ function ZoneRoom({ positionZ }: { positionZ: number }) {
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
         <planeGeometry args={[HALL_WIDTH, ZONE_DEPTH]} />
         <MeshReflectorMaterial
-          blur={[180, 45]}
-          resolution={160}
+          blur={[140, 36]}
+          resolution={128}
           mixBlur={1}
-          mixStrength={0.7}
-          roughness={0.7}
+          mixStrength={0.6}
+          roughness={0.75}
           depthScale={1}
           minDepthThreshold={0.4}
           maxDepthThreshold={1.4}
           color="#2a3a55"
-          metalness={0.6}
-          mirror={0.4}
+          metalness={0.55}
+          mirror={0.35}
         />
       </mesh>
 
@@ -371,11 +371,11 @@ function ZoneRoom({ positionZ }: { positionZ: number }) {
         <meshStandardMaterial color="#182842" roughness={0.7} />
       </mesh>
 
-      {/* 四個角落柱子 */}
-      <Column position={[-HALL_WIDTH / 2 + 0.8, 0, -ZONE_DEPTH / 2 + 0.8]} />
-      <Column position={[HALL_WIDTH / 2 - 0.8, 0, -ZONE_DEPTH / 2 + 0.8]} />
-      <Column position={[-HALL_WIDTH / 2 + 0.8, 0, ZONE_DEPTH / 2 - 0.8]} />
-      <Column position={[HALL_WIDTH / 2 - 0.8, 0, ZONE_DEPTH / 2 - 0.8]} />
+      {/* 四個角落柱子（緊貼牆角，避免擋住展品） */}
+      <Column position={[-HALL_WIDTH / 2 + 0.42, 0, -ZONE_DEPTH / 2 + 0.42]} />
+      <Column position={[HALL_WIDTH / 2 - 0.42, 0, -ZONE_DEPTH / 2 + 0.42]} />
+      <Column position={[-HALL_WIDTH / 2 + 0.42, 0, ZONE_DEPTH / 2 - 0.42]} />
+      <Column position={[HALL_WIDTH / 2 - 0.42, 0, ZONE_DEPTH / 2 - 0.42]} />
 
       {/* ===== 四周裝潢 ===== */}
       {/* 牆面護牆板、線板、壁柱 */}
@@ -512,25 +512,25 @@ export default function ExhibitionHall() {
         />
       ))}
 
-      {/* 環境光（提高以補償減少的燈源） */}
-      <ambientLight intensity={0.34} color="#b0d4ff" />
+      {/* 環境光（提高以補償移除的聚光燈） */}
+      <ambientLight intensity={0.46} color="#b8d8ff" />
 
       {/* 每個展區一盞主燈 + 一盞補光（精簡光源以提升效能） */}
       {zones.map((zone) => (
         <group key={`lights-${zone.id}`}>
           <pointLight
             position={[0, HALL_HEIGHT - 0.5, zone.positionZ - ZONE_DEPTH / 2]}
-            intensity={1.7}
-            color="#a0c8ff"
+            intensity={2.0}
+            color="#a8ccff"
             distance={ZONE_DEPTH}
-            decay={1.7}
+            decay={1.6}
           />
           <pointLight
             position={[0, 2.2, zone.positionZ - ZONE_DEPTH / 2]}
-            intensity={0.9}
+            intensity={1.0}
             color="#4a9eff"
-            distance={11}
-            decay={2}
+            distance={12}
+            decay={1.9}
           />
         </group>
       ))}
