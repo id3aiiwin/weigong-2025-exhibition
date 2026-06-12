@@ -107,21 +107,23 @@ function ColleagueCluster({
   clusterZ: number;
   onSelect: SelectFn;
 }) {
-  const pages = work.pages;
+  const allPages = work.pages;
+  // 各部門版面一致：固定 2×2，每位最多展示 4 份（其餘可點擊看全部）
+  const shown = allPages.slice(0, 4);
   const cols = 2;
-  const rows = Math.ceil(pages.length / cols);
-  const fw = 0.6;
-  const fh = 0.78;
+  const fw = 0.62;
+  const fh = 0.8;
   const stepZ = fw + 0.08;
   const stepY = fh + 0.08;
   const rot: [number, number, number] =
     sign < 0 ? [0, -Math.PI / 2, 0] : [0, Math.PI / 2, 0];
-  const topY = 2.62 + ((rows - 1) * stepY) / 2;
-  const bottomY = topY - (rows - 1) * stepY;
+  // 固定 2 列footprint，版面高度一致
+  const topY = 2.62 + stepY / 2;
+  const bottomY = topY - stepY;
 
   return (
     <group>
-      {pages.map((p, k) => {
+      {shown.map((p, k) => {
         const c = k % cols;
         const r = Math.floor(k / cols);
         const z = clusterZ + (c - (cols - 1) / 2) * stepZ;
@@ -160,12 +162,12 @@ function ColleagueCluster({
         </Text>
         <Text
           position={[0, -0.1, 0.01]}
-          fontSize={0.066}
+          fontSize={0.062}
           color="#d6bd86"
           anchorX="center"
           anchorY="middle"
         >
-          {`${pages.length} 份文件 · 點擊放大`}
+          {`共 ${allPages.length} 份 · 點擊看全部`}
         </Text>
       </group>
     </group>
