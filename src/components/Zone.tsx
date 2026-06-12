@@ -1,11 +1,10 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Text, Image } from "@react-three/drei";
 import { asset } from "@/lib/asset";
 import * as THREE from "three";
 import { zones, works, photos, courses, lobbyInfo } from "@/data/exhibitions";
-import HoloScreen from "./HoloScreen";
 import { ZONE_DEPTH, HALL_WIDTH } from "./ExhibitionHall";
 import {
   EntranceArch,
@@ -20,8 +19,158 @@ import {
 
 type SelectFn = (
   type: "work" | "highlight" | "course",
-  id: string
+  id: string,
+  page?: number
 ) => void;
+
+/** pNN.jpg → tNN.jpg（牆面用小縮圖） */
+function pageThumb(p: string) {
+  return p.replace(/\/p(\d+\.jpg)$/, "/t$1");
+}
+
+/** 單份文件小裱框 */
+function DocFrame({
+  position,
+  rotation,
+  thumb,
+  onClick,
+  fw,
+  fh,
+}: {
+  position: [number, number, number];
+  rotation: [number, number, number];
+  thumb: string;
+  onClick: () => void;
+  fw: number;
+  fh: number;
+}) {
+  const [hov, setHov] = useState(false);
+  const handlers = {
+    onPointerOver: (e: { stopPropagation: () => void }) => {
+      e.stopPropagation();
+      setHov(true);
+      document.body.style.cursor = "pointer";
+    },
+    onPointerOut: () => {
+      setHov(false);
+      document.body.style.cursor = "default";
+    },
+    onClick: (e: { stopPropagation: () => void }) => {
+      e.stopPropagation();
+      onClick();
+    },
+  };
+  return (
+    <group position={position} rotation={rotation}>
+      <mesh position={[0, 0, -0.03]}>
+        <boxGeometry args={[fw + 0.09, fh + 0.09, 0.05]} />
+        <meshStandardMaterial
+          color={hov ? "#4a3a28" : "#26231f"}
+          roughness={0.45}
+          metalness={0.1}
+        />
+      </mesh>
+      <mesh position={[0, 0, -0.005]}>
+        <planeGeometry args={[fw + 0.025, fh + 0.025]} />
+        <meshStandardMaterial
+          color={hov ? "#dcbd7c" : "#b89a5c"}
+          metalness={0.85}
+          roughness={0.3}
+        />
+      </mesh>
+      <mesh position={[0, 0, 0]} {...handlers}>
+        <planeGeometry args={[fw, fh]} />
+        <meshStandardMaterial color="#f5f1e9" roughness={0.95} />
+      </mesh>
+      <Image
+        url={asset(thumb)}
+        position={[0, 0, 0.006]}
+        scale={[fw * 0.9, fh * 0.9]}
+        toneMapped
+        raycast={() => null}
+      />
+    </group>
+  );
+}
+
+/** 一位同仁的文件叢集（牆面網格 + 部門銘牌） */
+function ColleagueCluster({
+  work,
+  wallX,
+  sign,
+  clusterZ,
+  onSelect,
+}: {
+  work: (typeof works)[number];
+  wallX: number;
+  sign: number;
+  clusterZ: number;
+  onSelect: SelectFn;
+}) {
+  const pages = work.pages;
+  const cols = 2;
+  const rows = Math.ceil(pages.length / cols);
+  const fw = 0.6;
+  const fh = 0.78;
+  const stepZ = fw + 0.08;
+  const stepY = fh + 0.08;
+  const rot: [number, number, number] =
+    sign < 0 ? [0, -Math.PI / 2, 0] : [0, Math.PI / 2, 0];
+  const topY = 2.62 + ((rows - 1) * stepY) / 2;
+  const bottomY = topY - (rows - 1) * stepY;
+
+  return (
+    <group>
+      {pages.map((p, k) => {
+        const c = k % cols;
+        const r = Math.floor(k / cols);
+        const z = clusterZ + (c - (cols - 1) / 2) * stepZ;
+        const y = topY - r * stepY;
+        return (
+          <DocFrame
+            key={k}
+            position={[wallX, y, z]}
+            rotation={rot}
+            thumb={pageThumb(p)}
+            onClick={() => onSelect("work", work.id, k)}
+            fw={fw}
+            fh={fh}
+          />
+        );
+      })}
+      {/* 部門銘牌 */}
+      <group position={[wallX, bottomY - 0.66, clusterZ]} rotation={rot}>
+        <mesh position={[0, 0, -0.004]}>
+          <planeGeometry args={[1.5, 0.4]} />
+          <meshStandardMaterial color="#b18f4d" metalness={0.7} roughness={0.35} />
+        </mesh>
+        <mesh>
+          <planeGeometry args={[1.44, 0.34]} />
+          <meshStandardMaterial color="#2c241c" roughness={0.5} />
+        </mesh>
+        <Text
+          position={[0, 0.045, 0.01]}
+          fontSize={0.12}
+          color="#f0e6cf"
+          anchorX="center"
+          anchorY="middle"
+          maxWidth={1.36}
+        >
+          {work.author}
+        </Text>
+        <Text
+          position={[0, -0.1, 0.01]}
+          fontSize={0.066}
+          color="#d6bd86"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {`${pages.length} 份文件 · 點擊放大`}
+        </Text>
+      </group>
+    </group>
+  );
+}
 
 interface ZoneProps {
   zoneId: string;
@@ -181,12 +330,11 @@ function LobbyZone() {
 function WorksZone({ onSelect }: { onSelect: SelectFn }) {
   const z = zones[1].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
-  // 牆面展示前 10 件（每側 5 件，沿走廊由前到後），其餘可由「展品目錄」瀏覽
-  const wallWorks = works.slice(0, 10);
-  const half = Math.ceil(wallWorks.length / 2);
-  const leftWorks = wallWorks.slice(0, half);
-  const rightWorks = wallWorks.slice(half);
-  const wallZ = (i: number) => 6 - i * 2.9;
+  // 20 位同仁，每側 10 位，每位一個文件叢集（密集畫廊牆）
+  const half = Math.ceil(works.length / 2);
+  const leftWorks = works.slice(0, half);
+  const rightWorks = works.slice(half);
+  const clusterZ = (i: number) => 6.3 - i * 1.5;
 
   return (
     <group position={[0, 0, centerZ]}>
@@ -225,80 +373,47 @@ function WorksZone({ onSelect }: { onSelect: SelectFn }) {
           anchorX="center"
           letterSpacing={0.3}
         >
-          {`STAFF PROJECTS · 共 ${works.length} 位（目錄可看全部）`}
+          {`STAFF PROJECTS · 共 ${works.length} 位 · ${works.reduce(
+            (s, w) => s + w.pages.length,
+            0
+          )} 份文件`}
         </Text>
       </group>
 
       {/* 懸掛旗幟 */}
       <CeilingBanner
-        position={[0, 2.8, -3]}
+        position={[0, 3.0, -3]}
         text="同仁成果"
         subText="STAFF PROJECTS"
       />
 
-      {/* 左牆作品 + 編號牌 + 軌道燈 */}
-      {leftWorks.map((work, i) => {
-        const zPos = wallZ(i);
-        return (
-          <group key={work.id}>
-            <HoloScreen
-              position={[-5.5, 2.2, zPos]}
-              rotation={[0, Math.PI / 2, 0]}
-              title={work.title}
-              author={work.author}
-              thumbnail={work.thumbnail}
-              pageCount={work.pages.length}
-              onClick={() => onSelect("work", work.id)}
-              seed={i * 0.7}
-            />
-            <ExhibitNumber
-              position={[-3.8, 0, zPos]}
-              rotation={[0, -Math.PI / 2, 0]}
-              number={String(i + 1).padStart(2, "0")}
-              label={work.title}
-            />
-            <TrackSpotlight
-              position={[-3, 4.7, zPos]}
-              target={[-5.5, 2.2, zPos]}
-              color="#ffffff"
-            />
-          </group>
-        );
-      })}
+      {/* 左牆密集裱框（每位同仁一個叢集） */}
+      {leftWorks.map((work, i) => (
+        <ColleagueCluster
+          key={work.id}
+          work={work}
+          wallX={-5.5}
+          sign={1}
+          clusterZ={clusterZ(i)}
+          onSelect={onSelect}
+        />
+      ))}
 
-      {/* 右牆作品 */}
-      {rightWorks.map((work, i) => {
-        const zPos = wallZ(i);
-        return (
-          <group key={work.id}>
-            <HoloScreen
-              position={[5.5, 2.2, zPos]}
-              rotation={[0, -Math.PI / 2, 0]}
-              title={work.title}
-              author={work.author}
-              thumbnail={work.thumbnail}
-              pageCount={work.pages.length}
-              onClick={() => onSelect("work", work.id)}
-              seed={i * 0.7 + 2}
-            />
-            <ExhibitNumber
-              position={[3.8, 0, zPos]}
-              rotation={[0, Math.PI / 2, 0]}
-              number={String(leftWorks.length + i + 1).padStart(2, "0")}
-              label={work.title}
-            />
-            <TrackSpotlight
-              position={[3, 4.7, zPos]}
-              target={[5.5, 2.2, zPos]}
-              color="#ffffff"
-            />
-          </group>
-        );
-      })}
+      {/* 右牆密集裱框 */}
+      {rightWorks.map((work, i) => (
+        <ColleagueCluster
+          key={work.id}
+          work={work}
+          wallX={5.5}
+          sign={-1}
+          clusterZ={clusterZ(i)}
+          onSelect={onSelect}
+        />
+      ))}
 
       {/* 中央觀賞長椅 */}
-      <Bench position={[0, 0, -4]} />
-      <Bench position={[0, 0, -8]} />
+      <Bench position={[0, 0, 1]} />
+      <Bench position={[0, 0, -5]} />
 
       {/* 地毯走道 */}
       <CarpetRunner z={-ZONE_DEPTH / 2 + 8} length={ZONE_DEPTH - 4} />

@@ -2,8 +2,8 @@ import { zones, works, photos, courses } from "./exhibitions";
 
 // 與 ExhibitionHall 的 ZONE_DEPTH 保持一致
 export const ZONE_DEPTH = 18;
-// 牆面實際擺放的作品數（其餘可由「展品目錄」瀏覽）
-export const WALL_WORKS = 10;
+// 牆面擺放全部作品（密集裱框）
+export const WALL_WORKS = 20;
 
 export type StopType = "zone" | "work" | "highlight" | "course";
 
@@ -45,7 +45,7 @@ export function buildStops(): Stop[] {
     const left = idx < half;
     const k = left ? idx : idx - half;
     const sign = left ? -1 : 1;
-    const zRel = 6 - k * 2.9;
+    const zRel = 6.3 - k * 1.5;
     const worldZ = centerZ(1) + zRel;
     stops.push({
       key: w.id,
@@ -53,8 +53,8 @@ export function buildStops(): Stop[] {
       type: "work",
       id: w.id,
       label: w.author,
-      cam: [sign * 2.3, 1.7, worldZ + 0.1],
-      look: [sign * 5.5, 2.2, worldZ],
+      cam: [sign * 1.0, 2.5, worldZ + 0.5],
+      look: [sign * 5.5, 2.5, worldZ],
     });
   });
 

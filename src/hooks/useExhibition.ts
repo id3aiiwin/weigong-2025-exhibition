@@ -7,6 +7,7 @@ export type ControlMode = "guided" | "free";
 export interface SelectedExhibit {
   type: StopType;
   id: string;
+  page?: number;
 }
 
 export function useExhibition() {
@@ -47,8 +48,8 @@ export function useExhibition() {
 
   // 開啟檢視器（同時把鏡頭帶到該展品，若它在巡覽路徑上）
   const selectExhibit = useCallback(
-    (type: StopType, id: string) => {
-      setSelected({ type, id });
+    (type: StopType, id: string, page?: number) => {
+      setSelected({ type, id, page });
       focusExhibit(type, id);
     },
     [focusExhibit]

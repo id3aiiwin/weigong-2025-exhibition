@@ -12,10 +12,10 @@ interface ExhibitViewerProps {
 export default function PdfViewer({ selected, onClose }: ExhibitViewerProps) {
   const [page, setPage] = useState(0);
 
-  // 切換展品時重設頁碼
+  // 切換展品時跳到指定頁（預設第一頁）
   useEffect(() => {
-    setPage(0);
-  }, [selected.id]);
+    setPage(selected.page ?? 0);
+  }, [selected.id, selected.page]);
 
   // 整理出統一的顯示資料
   let title = "";

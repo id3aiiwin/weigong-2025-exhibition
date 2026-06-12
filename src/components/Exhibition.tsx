@@ -7,6 +7,7 @@ import Zone from "./Zone";
 import GuidedTour from "./GuidedTour";
 import PlayerControls from "./PlayerControls";
 import Particles from "./Particles";
+import Visitors from "./Visitors";
 import { zones } from "@/data/exhibitions";
 import type { StopType } from "@/data/tourStops";
 
@@ -15,7 +16,7 @@ interface ExhibitionProps {
   look: [number, number, number];
   controlMode: "guided" | "free";
   joystickInput: { x: number; y: number };
-  onSelectExhibit: (type: StopType, id: string) => void;
+  onSelectExhibit: (type: StopType, id: string, page?: number) => void;
 }
 
 export default function Exhibition({
@@ -47,6 +48,9 @@ export default function Exhibition({
         ))}
 
         <Particles count={140} />
+
+        {/* 3D 參觀人物 */}
+        <Visitors />
 
         <GuidedTour cam={cam} look={look} enabled={controlMode === "guided"} />
 
