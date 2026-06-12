@@ -1,10 +1,5 @@
 import { zones, works, photos, courses } from "./exhibitions";
 
-// 與 ExhibitionHall 的 ZONE_DEPTH 保持一致
-export const ZONE_DEPTH = 18;
-// 牆面擺放全部作品（密集裱框）
-export const WALL_WORKS = 20;
-
 export type StopType = "zone" | "work" | "highlight" | "course";
 
 export interface Stop {
@@ -17,16 +12,51 @@ export interface Stop {
   look: [number, number, number];
 }
 
-const centerZ = (zi: number) => zones[zi].positionZ - ZONE_DEPTH / 2;
+const centerZ = (zi: number) => zones[zi].positionZ - zones[zi].depth / 2;
+
+// ===== 同仁牆密集裱框版面（每位 2 列、欄數依文件數，沿加長的牆排列）=====
+export const FRAME_W = 0.62;
+export const FRAME_H = 0.8;
+const STEP_Z = FRAME_W + 0.08;
+const CLUSTER_GAP = 0.5;
+
+export interface WorkLayout {
+  id: string;
+  wall: "L" | "R";
+  sign: number; // L:1(牆在 -x) R:-1(牆在 +x)
+  cols: number;
+  width: number;
+  clusterZ: number; // 相對 works 中心
+}
+
+export function worksLayout(): WorkLayout[] {
+  const depth = zones[1].depth;
+  const half = Math.ceil(works.length / 2);
+  const out: WorkLayout[] = [];
+  const layWall = (list: typeof works, wall: "L" | "R", sign: number) => {
+    let cur = depth / 2 - 2.2; // 由前往後
+    list.forEach((w) => {
+      const cols = Math.max(1, Math.ceil(w.pages.length / 2));
+      const width = cols * STEP_Z;
+      const clusterZ = cur - width / 2;
+      out.push({ id: w.id, wall, sign, cols, width, clusterZ });
+      cur -= width + CLUSTER_GAP;
+    });
+  };
+  layWall(works.slice(0, half), "L", 1);
+  layWall(works.slice(half), "R", -1);
+  return out;
+}
 
 function overview(zi: number): Stop {
   const cz = centerZ(zi);
+  const d = zones[zi].depth;
   return {
     key: `zone-${zi}`,
     zoneIndex: zi,
     type: "zone",
     label: zones[zi].name,
-    cam: [0, 1.7, cz + ZONE_DEPTH / 2 - 2],
+    cam: [0, 1.7, cz + d / 2 - 2],
     look: [0, 1.7, cz - 3],
   };
 }
@@ -37,24 +67,21 @@ export function buildStops(): Stop[] {
   // 0 大廳
   stops.push(overview(0));
 
-  // 1 同仁成果（牆面前 WALL_WORKS 件）
+  // 1 同仁成果（逐位叢集）
   stops.push(overview(1));
-  const wall = works.slice(0, WALL_WORKS);
-  const half = Math.ceil(wall.length / 2);
-  wall.forEach((w, idx) => {
-    const left = idx < half;
-    const k = left ? idx : idx - half;
-    const sign = left ? -1 : 1;
-    const zRel = 6.3 - k * 1.5;
-    const worldZ = centerZ(1) + zRel;
+  const layout = worksLayout();
+  const byId = new Map(works.map((w) => [w.id, w]));
+  layout.forEach((L) => {
+    const w = byId.get(L.id)!;
+    const worldZ = centerZ(1) + L.clusterZ;
     stops.push({
       key: w.id,
       zoneIndex: 1,
       type: "work",
       id: w.id,
       label: w.author,
-      cam: [sign * 1.0, 2.5, worldZ + 0.5],
-      look: [sign * 5.5, 2.5, worldZ],
+      cam: [L.sign * 0.4, 2.5, worldZ + 0.4],
+      look: [L.sign * 5.5, 2.4, worldZ],
     });
   });
 
@@ -66,7 +93,7 @@ export function buildStops(): Stop[] {
     const left = idx < phalf;
     const k = left ? idx : idx - phalf;
     const sign = left ? -1 : 1;
-    const zRel = 5 - k * 4; // 在房間內（-9~9），避免落到後牆外
+    const zRel = 5 - k * 4;
     const worldZ = centerZ(2) + zRel;
     stops.push({
       key: p.id,
@@ -79,9 +106,9 @@ export function buildStops(): Stop[] {
     });
   });
 
-  // 3 2026 展望（課程在後牆，總覽鏡頭直接面向後牆）
+  // 3 2026 展望
   const cz3 = centerZ(3);
-  const boardZ = cz3 - ZONE_DEPTH / 2 + 0.6;
+  const boardZ = cz3 - zones[3].depth / 2 + 0.6;
   stops.push({
     key: "zone-3",
     zoneIndex: 3,
@@ -99,7 +126,7 @@ export function buildStops(): Stop[] {
       type: "course",
       id: c.id,
       label: c.title,
-      cam: [x, 1.7, boardZ + 4.2], // 正面直視，避開角落柱
+      cam: [x, 1.7, boardZ + 4.2],
       look: [x, 2, boardZ],
     });
   });

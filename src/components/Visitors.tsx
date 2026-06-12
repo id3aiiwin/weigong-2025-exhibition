@@ -5,7 +5,6 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { SkeletonUtils } from "three-stdlib";
 import { zones } from "@/data/exhibitions";
-import { ZONE_DEPTH } from "./ExhibitionHall";
 import { asset } from "@/lib/asset";
 
 const MODEL = asset("/models/visitor.glb");
@@ -78,22 +77,24 @@ export default function Visitors() {
   const cfgs: Cfg[] = [];
   zones.forEach((zone, zi) => {
     if (zi === 0) return; // 大廳留白
-    const cz = zone.positionZ - ZONE_DEPTH / 2;
+    const cz = zone.positionZ - zone.depth / 2;
+    const reach = Math.min(zone.depth / 2 - 2, 6);
     cfgs.push({
       x: zi % 2 === 0 ? -1.8 : 1.8,
-      z0: cz - 5,
-      z1: cz + 5,
+      z0: cz - reach,
+      z1: cz + reach,
       speed: 0.32 + zi * 0.03,
       phase: zi * 1.9,
       tint: tints[zi % tints.length],
     });
   });
-  // 走廊再加一位
+  // 同仁區（加長）再加一位
+  const wcz = zones[1].positionZ - zones[1].depth / 2;
   cfgs.push({
-    x: 1.4,
-    z0: zones[1].positionZ - ZONE_DEPTH / 2 - 4,
-    z1: zones[1].positionZ - ZONE_DEPTH / 2 + 4,
-    speed: 0.28,
+    x: 1.6,
+    z0: wcz - 8,
+    z1: wcz + 8,
+    speed: 0.26,
     phase: 3.5,
     tint: tints[4],
   });

@@ -27,15 +27,17 @@ export interface CourseItem {
 export interface ZoneConfig {
   id: string;
   name: string;
-  /** 展區中心 Z 座標（一字形走廊沿 Z 軸排列） */
+  /** 展區前緣 Z 座標（一字形走廊沿 Z 軸排列） */
   positionZ: number;
+  /** 展區深度（同仁成果加長以容納全部文件） */
+  depth: number;
 }
 
 export const zones: ZoneConfig[] = [
-  { id: "lobby", name: "入口大廳", positionZ: 0 },
-  { id: "works", name: "同仁成果", positionZ: -20 },
-  { id: "photos", name: "成效亮點", positionZ: -40 },
-  { id: "courses", name: "2026 展望", positionZ: -60 },
+  { id: "lobby", name: "入口大廳", positionZ: 0, depth: 18 },
+  { id: "works", name: "同仁成果", positionZ: -20, depth: 30 },
+  { id: "photos", name: "成效亮點", positionZ: -54, depth: 18 },
+  { id: "courses", name: "2026 展望", positionZ: -74, depth: 18 },
 ];
 
 export const lobbyInfo = {

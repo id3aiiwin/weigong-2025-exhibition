@@ -5,7 +5,8 @@ import { Text, Image } from "@react-three/drei";
 import { asset } from "@/lib/asset";
 import * as THREE from "three";
 import { zones, works, photos, courses, lobbyInfo } from "@/data/exhibitions";
-import { ZONE_DEPTH, HALL_WIDTH } from "./ExhibitionHall";
+import { worksLayout } from "@/data/tourStops";
+import { HALL_WIDTH } from "./ExhibitionHall";
 import {
   EntranceArch,
   ZoneArch,
@@ -93,37 +94,37 @@ function DocFrame({
   );
 }
 
-/** 一位同仁的文件叢集（牆面網格 + 部門銘牌） */
+/** 一位同仁的文件叢集（牆面 2 列網格 + 部門銘牌，展示全部文件） */
 function ColleagueCluster({
   work,
   wallX,
   sign,
   clusterZ,
+  cols,
   onSelect,
 }: {
   work: (typeof works)[number];
   wallX: number;
   sign: number;
   clusterZ: number;
+  cols: number;
   onSelect: SelectFn;
 }) {
   const allPages = work.pages;
-  // 各部門版面一致：固定 2×2，每位最多展示 4 份（其餘可點擊看全部）
-  const shown = allPages.slice(0, 4);
-  const cols = 2;
   const fw = 0.62;
   const fh = 0.8;
   const stepZ = fw + 0.08;
   const stepY = fh + 0.08;
   const rot: [number, number, number] =
     sign < 0 ? [0, -Math.PI / 2, 0] : [0, Math.PI / 2, 0];
-  // 固定 2 列footprint，版面高度一致
+  // 固定 2 列：各部門等高
   const topY = 2.62 + stepY / 2;
   const bottomY = topY - stepY;
+  const plateW = Math.max(1.1, cols * stepZ - 0.08);
 
   return (
     <group>
-      {shown.map((p, k) => {
+      {allPages.map((p, k) => {
         const c = k % cols;
         const r = Math.floor(k / cols);
         const z = clusterZ + (c - (cols - 1) / 2) * stepZ;
@@ -143,11 +144,11 @@ function ColleagueCluster({
       {/* 部門銘牌 */}
       <group position={[wallX, bottomY - 0.66, clusterZ]} rotation={rot}>
         <mesh position={[0, 0, -0.004]}>
-          <planeGeometry args={[1.5, 0.4]} />
+          <planeGeometry args={[plateW + 0.06, 0.4]} />
           <meshStandardMaterial color="#b18f4d" metalness={0.7} roughness={0.35} />
         </mesh>
         <mesh>
-          <planeGeometry args={[1.44, 0.34]} />
+          <planeGeometry args={[plateW, 0.34]} />
           <meshStandardMaterial color="#2c241c" roughness={0.5} />
         </mesh>
         <Text
@@ -156,7 +157,7 @@ function ColleagueCluster({
           color="#f0e6cf"
           anchorX="center"
           anchorY="middle"
-          maxWidth={1.36}
+          maxWidth={plateW - 0.1}
         >
           {work.author}
         </Text>
@@ -167,7 +168,7 @@ function ColleagueCluster({
           anchorX="center"
           anchorY="middle"
         >
-          {`共 ${allPages.length} 份 · 點擊看全部`}
+          {`${allPages.length} 份文件 · 點擊放大`}
         </Text>
       </group>
     </group>
@@ -194,6 +195,7 @@ function GlowRing({ position }: { position: [number, number, number] }) {
 }
 
 function LobbyZone() {
+  const ZONE_DEPTH = zones[0].depth;
   const z = zones[0].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
 
@@ -330,13 +332,12 @@ function LobbyZone() {
 }
 
 function WorksZone({ onSelect }: { onSelect: SelectFn }) {
+  const ZONE_DEPTH = zones[1].depth;
   const z = zones[1].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
-  // 20 位同仁，每側 10 位，每位一個文件叢集（密集畫廊牆）
-  const half = Math.ceil(works.length / 2);
-  const leftWorks = works.slice(0, half);
-  const rightWorks = works.slice(half);
-  const clusterZ = (i: number) => 6.3 - i * 1.5;
+  // 加長牆面，每位同仁一個叢集（2 列、欄數依文件數），展示全部文件
+  const layout = worksLayout();
+  const byId = new Map(works.map((w) => [w.id, w]));
 
   return (
     <group position={[0, 0, centerZ]}>
@@ -389,41 +390,36 @@ function WorksZone({ onSelect }: { onSelect: SelectFn }) {
         subText="STAFF PROJECTS"
       />
 
-      {/* 左牆密集裱框（每位同仁一個叢集） */}
-      {leftWorks.map((work, i) => (
-        <ColleagueCluster
-          key={work.id}
-          work={work}
-          wallX={-5.5}
-          sign={1}
-          clusterZ={clusterZ(i)}
-          onSelect={onSelect}
-        />
-      ))}
+      {/* 密集裱框畫廊牆（每位同仁一個叢集，展示全部文件） */}
+      {layout.map((L) => {
+        const work = byId.get(L.id);
+        if (!work) return null;
+        return (
+          <ColleagueCluster
+            key={L.id}
+            work={work}
+            wallX={L.sign > 0 ? -5.5 : 5.5}
+            sign={L.sign}
+            clusterZ={L.clusterZ}
+            cols={L.cols}
+            onSelect={onSelect}
+          />
+        );
+      })}
 
-      {/* 右牆密集裱框 */}
-      {rightWorks.map((work, i) => (
-        <ColleagueCluster
-          key={work.id}
-          work={work}
-          wallX={5.5}
-          sign={-1}
-          clusterZ={clusterZ(i)}
-          onSelect={onSelect}
-        />
-      ))}
-
-      {/* 中央觀賞長椅 */}
-      <Bench position={[0, 0, 1]} />
-      <Bench position={[0, 0, -5]} />
+      {/* 中央觀賞長椅（沿加長走道） */}
+      <Bench position={[0, 0, 5]} />
+      <Bench position={[0, 0, -2]} />
+      <Bench position={[0, 0, -9]} />
 
       {/* 地毯走道 */}
-      <CarpetRunner z={-ZONE_DEPTH / 2 + 8} length={ZONE_DEPTH - 4} />
+      <CarpetRunner z={0} length={ZONE_DEPTH - 3} />
     </group>
   );
 }
 
 function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
+  const ZONE_DEPTH = zones[2].depth;
   const z = zones[2].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
 
@@ -639,6 +635,7 @@ function PhotosZone({ onSelect }: { onSelect: SelectFn }) {
 }
 
 function CoursesZone({ onSelect }: { onSelect: SelectFn }) {
+  const ZONE_DEPTH = zones[3].depth;
   const z = zones[3].positionZ;
   const centerZ = z - ZONE_DEPTH / 2;
 

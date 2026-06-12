@@ -65,7 +65,8 @@ function CeilingLightStrip({ z, length }: { z: number; length: number }) {
 }
 
 /** 牆面護牆板 + 上下線板 + 壁柱（沿三面牆） */
-function WallDressing() {
+function WallDressing({ depth }: { depth: number }) {
+  const ZONE_DEPTH = depth;
   const xL = -HALL_WIDTH / 2 + 0.16;
   const xR = HALL_WIDTH / 2 - 0.16;
   const zB = -ZONE_DEPTH / 2 + 0.16;
@@ -75,8 +76,12 @@ function WallDressing() {
   const moldColor = "#4a3d2f";
   const accentColor = "#b18f4d";
 
-  // 側牆壁柱位置（沿 Z）
-  const pilZ = [-7, -3.5, 0, 3.5, 7];
+  // 側牆壁柱位置（沿 Z，依深度自動分佈）
+  const pilCount = Math.max(5, Math.round(ZONE_DEPTH / 3.6));
+  const pilZ = Array.from({ length: pilCount }, (_, i) => {
+    const span = ZONE_DEPTH - 2;
+    return -span / 2 + (span / (pilCount - 1)) * i;
+  });
 
   return (
     <group>
@@ -248,7 +253,8 @@ function Stanchion({ position }: { position: [number, number, number] }) {
 }
 
 /** 天花板凹槽飾框 */
-function CeilingCoffer() {
+function CeilingCoffer({ depth }: { depth: number }) {
+  const ZONE_DEPTH = depth;
   const w = HALL_WIDTH * 0.7;
   const d = ZONE_DEPTH * 0.7;
   const y = HALL_HEIGHT - 0.04;
@@ -281,7 +287,8 @@ function CeilingCoffer() {
 }
 
 /** 單一展區的牆壁與地板 */
-function ZoneRoom({ positionZ }: { positionZ: number }) {
+function ZoneRoom({ positionZ, depth }: { positionZ: number; depth: number }) {
+  const ZONE_DEPTH = depth;
   const centerZ = positionZ - ZONE_DEPTH / 2;
 
   return (
@@ -356,10 +363,10 @@ function ZoneRoom({ positionZ }: { positionZ: number }) {
 
       {/* ===== 四周裝潢 ===== */}
       {/* 牆面護牆板、線板、壁柱 */}
-      <WallDressing />
+      <WallDressing depth={depth} />
 
       {/* 天花板凹槽飾框 */}
-      <CeilingCoffer />
+      <CeilingCoffer depth={depth} />
 
       {/* 暖色壁燈（左右牆） */}
       {[-5.5, -1, 3.5].map((z) => (
@@ -399,11 +406,11 @@ function ZoneRoom({ positionZ }: { positionZ: number }) {
   );
 }
 
-/** 展區之間的走廊連接 */
-function Corridor({ fromZ, toZ }: { fromZ: number; toZ: number }) {
-  const length = Math.abs(fromZ - toZ) - ZONE_DEPTH;
-  if (length <= 0) return null;
-  const centerZ = (fromZ + toZ) / 2 - ZONE_DEPTH / 2;
+/** 展區之間的走廊連接（backZ：前一區後緣，frontZ：後一區前緣） */
+function Corridor({ backZ, frontZ }: { backZ: number; frontZ: number }) {
+  const length = backZ - frontZ;
+  if (length <= 0.5) return null;
+  const centerZ = (backZ + frontZ) / 2;
 
   return (
     <group position={[0, 0, centerZ]}>
@@ -459,15 +466,15 @@ export default function ExhibitionHall() {
     <group>
       {/* 各展區房間 */}
       {zones.map((zone) => (
-        <ZoneRoom key={zone.id} positionZ={zone.positionZ} />
+        <ZoneRoom key={zone.id} positionZ={zone.positionZ} depth={zone.depth} />
       ))}
 
       {/* 走廊連接 */}
       {zones.slice(0, -1).map((zone, i) => (
         <Corridor
           key={`corridor-${i}`}
-          fromZ={zone.positionZ}
-          toZ={zones[i + 1].positionZ}
+          backZ={zone.positionZ - zone.depth}
+          frontZ={zones[i + 1].positionZ}
         />
       ))}
 
@@ -475,17 +482,27 @@ export default function ExhibitionHall() {
       <ambientLight intensity={0.85} color="#fff4e6" />
       <hemisphereLight args={["#fff6ea", "#9c9486", 0.7]} />
 
-      {/* 每個展區一盞暖白主燈 */}
-      {zones.map((zone) => (
-        <pointLight
-          key={`lights-${zone.id}`}
-          position={[0, HALL_HEIGHT - 0.4, zone.positionZ - ZONE_DEPTH / 2]}
-          intensity={1.5}
-          color="#fff1dc"
-          distance={ZONE_DEPTH * 1.1}
-          decay={1.5}
-        />
-      ))}
+      {/* 各展區暖白主燈（依深度佈點） */}
+      {zones.flatMap((zone) => {
+        const cz = zone.positionZ - zone.depth / 2;
+        const nLights = Math.max(1, Math.round(zone.depth / 14));
+        return Array.from({ length: nLights }, (_, k) => {
+          const zz =
+            nLights === 1
+              ? cz
+              : cz + zone.depth * 0.7 * (k / (nLights - 1) - 0.5);
+          return (
+            <pointLight
+              key={`light-${zone.id}-${k}`}
+              position={[0, HALL_HEIGHT - 0.4, zz]}
+              intensity={1.4}
+              color="#fff1dc"
+              distance={22}
+              decay={1.5}
+            />
+          );
+        });
+      })}
     </group>
   );
 }
